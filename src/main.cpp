@@ -10,7 +10,7 @@
 #include "src/scene/camera.h"
 #include "src/scene/scene.h"
 #include "src/objects/player.h"
-#include "src/objects/space.h"
+#include "src/objects/sea.h"
 #include "src/objects/wave.h"
 
 const uint32_t WIDTH = 2560;
@@ -34,18 +34,16 @@ private:
 
         // Create a camera
         auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, 1000.0f);
-        camera->position.z = -10.0f;
+        camera->offset.z = camera->distance;
+        camera->offset.y = -5.0f;
         scene.camera = move(camera);
 
-        auto ocean = std::make_unique<Space>();
+        auto ocean = std::make_unique<Sea>();
         scene.objects.push_back(move(ocean));
 
         // Add player to the scene
         auto player = std::make_unique<Player>();
         scene.objects.push_back(move(player));
-
-        auto wave = std::make_unique<Wave>();
-        scene.objects.push_back(move(wave));
     }
 
 public:

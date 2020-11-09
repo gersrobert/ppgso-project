@@ -1,19 +1,22 @@
 #include "scene.h"
 
 void Scene::update(float time) {
-    static float x = 0;
-    x += 0.01f;
+    static float camLeftRight = 0;
     if (keyboard[GLFW_KEY_RIGHT]) {
-        camera->position.x += 0.1f;
+        camLeftRight += 0.75f * time;
+        camera->offset.x = std::sin(camLeftRight) * camera->distance;
+        camera->offset.z = std::cos(camLeftRight) * camera->distance;
     }
     if (keyboard[GLFW_KEY_LEFT]) {
-        camera->position.x -= 0.1f;
+        camLeftRight -= 0.75f * time;
+        camera->offset.x = std::sin(camLeftRight) * camera->distance;
+        camera->offset.z = std::cos(camLeftRight) * camera->distance;
     }
     if (keyboard[GLFW_KEY_UP]) {
-        camera->position.y -= 0.1f;
+        camera->offset.y -= 0.1f;
     }
     if (keyboard[GLFW_KEY_DOWN]) {
-        camera->position.y += 0.1f;
+        camera->offset.y += 0.1f;
     }
 
     camera->update();

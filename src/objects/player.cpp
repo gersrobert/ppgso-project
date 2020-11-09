@@ -44,7 +44,7 @@ bool Player::update(Scene &scene, float dt) {
     rotation.z += deltaRotation;
     position.z += 0.1f * std::cos(rotation.z);
     position.x += 0.1f * std::sin(rotation.z);
-    scene.camera->center = position;
+    scene.camera->position = position;
 
     generateModelMatrix();
     return true;
