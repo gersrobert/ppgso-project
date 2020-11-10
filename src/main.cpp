@@ -6,11 +6,12 @@
 #include <list>
 
 #include <ppgso/ppgso.h>
+#include <src/objects/water.h>
 
 #include "src/scene/camera.h"
 #include "src/scene/scene.h"
-#include "src/objects/player.h"
-#include "src/objects/sea.h"
+#include "src/objects/boat.h"
+#include "src/objects/bezier_waves.h"
 #include "src/objects/wave.h"
 
 const uint32_t WIDTH = 2560;
@@ -38,12 +39,13 @@ private:
         camera->offset.y = -5.0f;
         scene.camera = move(camera);
 
-        auto ocean = std::make_unique<Sea>();
-        scene.objects.push_back(move(ocean));
-
-        // Add player to the scene
-        auto player = std::make_unique<Player>();
+        auto player = std::make_unique<Boat>(scene);
         scene.objects.push_back(move(player));
+
+//        auto waves = std::make_unique<BezierWaves>();
+//        scene.objects.push_back(move(waves));
+        auto water = std::make_unique<Water>(scene);
+        scene.objects.push_back(move(water));
     }
 
 public:
@@ -58,6 +60,9 @@ public:
         // Enable Z-buffer
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Enable polygon culling
 //        glEnable(GL_CULL_FACE);

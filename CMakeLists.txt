@@ -103,7 +103,7 @@ target_include_directories(ppgso PUBLIC
 #
 
 # Playground target
-add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/player.cpp src/scene/camera.cpp src/objects/sea.cpp src/objects/wave.cpp)
+add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat.cpp src/scene/camera.cpp src/objects/bezier_waves.cpp src/objects/wave.cpp src/objects/rudder.cpp src/objects/rudder.h src/objects/water.cpp src/objects/water.h)
 target_link_libraries(main ppgso shaders)
 install (TARGETS main DESTINATION .)
 
