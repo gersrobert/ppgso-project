@@ -11,19 +11,22 @@ uniform float Transparency;
 // (optional) Texture offset
 uniform vec2 TextureOffset;
 
+uniform vec3 CameraPosition;
+
 // The vertex shader will feed this input
 in vec2 texCoord;
 
 // Wordspace normal passed from vertex shader
 in vec4 normal;
 
+in vec4 gl_FragCoord;
+
 // The final color
 out vec4 FragmentColor;
 
 void main() {
   // Compute diffuse lighting
-  float diffuse = max(dot(normal, vec4(LightDirection, 1.0f)), 0.0f);
-//  float diffuse = 1;
+  float diffuse = max(dot(normal, vec4(LightDirection, 1.0f)), 0.1f);
 
   // Lookup the color in Texture on coordinates given by texCoord
   // NOTE: Texture coordinate is inverted vertically for compatibility with OBJ

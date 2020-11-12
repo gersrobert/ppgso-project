@@ -10,7 +10,7 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 }
 
 void Camera::update() {
-    viewMatrix = lookAt(position - offset, position - back, up);
+    viewMatrix = glm::lookAt(position - offset, position - back, up);
 }
 
 glm::vec3 Camera::cast(double u, double v) {

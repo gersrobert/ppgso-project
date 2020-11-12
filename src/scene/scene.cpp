@@ -40,6 +40,10 @@ void Scene::render() {
         obj->render(*this);
 }
 
+void Scene::setTargetPosition(const glm::vec3 &position) {
+    camera->position = position;
+}
+
 std::vector<Object *> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {
     std::vector<Object *> intersected = {};
     for (auto &object : objects) {

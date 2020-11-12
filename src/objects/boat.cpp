@@ -21,14 +21,9 @@ Boat::Boat(Scene &scene) {
 
     position.y -= 2.1f;
     rotation.y =  -0.15f;
-
-//    auto rudder = std::make_unique<Rudder>(*this);
-//    scene.objects.push_back(std::move(rudder));
 }
 
 bool Boat::update(Scene &scene, float dt) {
-    // Fire delay increment
-
     // Hit detection
     for (auto &obj : scene.objects) {
         // Ignore self in scene
@@ -39,17 +34,17 @@ bool Boat::update(Scene &scene, float dt) {
     // Keyboard controls
     float deltaRotation = 0;
     if (scene.keyboard[GLFW_KEY_D]) {
-        deltaRotation = -0.5f * dt;
+        deltaRotation = -0.75f * dt;
     }
     if (scene.keyboard[GLFW_KEY_A]) {
-        deltaRotation = 0.5f * dt;
+        deltaRotation = 0.75f * dt;
     }
 
     rotation.z += deltaRotation;
     position.z += 0.05f * std::cos(rotation.z);
     position.x += 0.05f * std::sin(rotation.z);
-    scene.camera->position = position;
 
+    scene.setTargetPosition(position);
     generateModelMatrix();
     return true;
 }
@@ -68,6 +63,7 @@ void Boat::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
+    shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
 
     mesh->render();
 }

@@ -16,6 +16,9 @@ private:
     static std::unique_ptr<ppgso::Mesh> mesh;
     static std::unique_ptr<ppgso::Texture> texture;
 
+    float speed;
+    float rotationSpeed;
+
 public:
     /*!
      * Create a new player

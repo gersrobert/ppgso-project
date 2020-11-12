@@ -7,6 +7,7 @@
 
 #include <ppgso/ppgso.h>
 #include <src/objects/water.h>
+#include <src/objects/island.h>
 
 #include "src/scene/camera.h"
 #include "src/scene/scene.h"
@@ -34,16 +35,17 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, 1000.0f);
+        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, 100.0f);
         camera->offset.z = camera->distance;
-        camera->offset.y = -5.0f;
+        camera->offset.y = -7.0f;
         scene.camera = move(camera);
 
         auto player = std::make_unique<Boat>(scene);
         scene.objects.push_back(move(player));
 
-//        auto waves = std::make_unique<BezierWaves>();
-//        scene.objects.push_back(move(waves));
+        auto island = std::make_unique<Island>(scene);
+        scene.objects.push_back(move(island));
+
         auto water = std::make_unique<Water>(scene);
         scene.objects.push_back(move(water));
     }
@@ -53,6 +55,8 @@ public:
      * Construct custom game window
      */
     SceneWindow(const int width, const int height) : Window{"playground", width, height} {
+        srand(time(NULL));
+
         //hideCursor();
         glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
@@ -65,9 +69,18 @@ public:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Enable polygon culling
-//        glEnable(GL_CULL_FACE);
-//        glFrontFace(GL_CCW);
-//        glCullFace(GL_BACK);
+        glEnable(GL_CULL_FACE);
+        glFrontFace(GL_CCW);
+        glCullFace(GL_BACK);
+
+        glEnable(GL_FOG);
+        glFogi(GL_FOG_MODE, GL_EXP2);
+        GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
+        glFogfv(GL_FOG_COLOR, fogColor);
+        glFogf (GL_FOG_DENSITY, 0.3f);
+        glHint (GL_FOG_HINT, GL_NICEST);
+        glFogf(GL_FOG_START, 10);
+        glFogf(GL_FOG_END, 100);
 
         initScene();
     }
@@ -115,7 +128,7 @@ public:
         time = (float) glfwGetTime();
 
         // Set gray background
-        glClearColor(.5f, .5f, .5f, 0);
+        glClearColor(.675f, .82f, .82f, 0);
         // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

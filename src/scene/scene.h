@@ -34,6 +34,8 @@ public:
      */
     std::vector<Object *> intersect(const glm::vec3 &position, const glm::vec3 &direction);
 
+    void setTargetPosition(const glm::vec3 &position);
+
     // Camera object
     std::unique_ptr<Camera> camera;
 
