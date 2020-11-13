@@ -6,6 +6,7 @@
 #include <dependencies/include/GL/glew.h>
 #include <src/scene/vertex_object.h>
 #include <mesh.h>
+#include "chunk.h"
 
 class Island final : public Object {
 private:
@@ -15,9 +16,11 @@ private:
     uint32_t meshIndex;
     uint32_t textureIndex;
 
+    Chunk &chunk;
+
 public:
 
-    explicit Island(Scene &scene);
+    explicit Island(Scene &scene, Chunk &chunk);
 
     bool update(Scene &scene, float dt) override;
 

@@ -1,13 +1,11 @@
-// Playground
-// - You can use this template project for quick C++ experiments
-
 #include <iostream>
 #include <map>
 #include <list>
 
 #include <ppgso/ppgso.h>
-#include <src/objects/water.h>
-#include <src/objects/island.h>
+#include <src/objects/world/water.h>
+#include <src/objects/world/island.h>
+#include <src/objects/world/chunk.h>
 
 #include "src/scene/camera.h"
 #include "src/scene/scene.h"
@@ -35,7 +33,7 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, 100.0f);
+        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY * 100);
         camera->offset.z = camera->distance;
         camera->offset.y = -7.0f;
         scene.camera = move(camera);
@@ -43,11 +41,12 @@ private:
         auto player = std::make_unique<Boat>(scene);
         scene.objects.push_back(move(player));
 
-        auto island = std::make_unique<Island>(scene);
-        scene.objects.push_back(move(island));
-
-        auto water = std::make_unique<Water>(scene);
-        scene.objects.push_back(move(water));
+        for (int32_t i = -1; i <= 1; ++i) {
+            for (int32_t j = -1; j <= 1; ++j) {
+                auto chunk = std::make_unique<Chunk>(scene, glm::vec2{i, j});
+                scene.objects.push_back(move(chunk));
+            }
+        }
     }
 
 public:
@@ -77,8 +76,8 @@ public:
         glFogi(GL_FOG_MODE, GL_EXP2);
         GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
         glFogfv(GL_FOG_COLOR, fogColor);
-        glFogf (GL_FOG_DENSITY, 0.3f);
-        glHint (GL_FOG_HINT, GL_NICEST);
+        glFogf(GL_FOG_DENSITY, 0.3f);
+        glHint(GL_FOG_HINT, GL_NICEST);
         glFogf(GL_FOG_START, 10);
         glFogf(GL_FOG_END, 100);
 

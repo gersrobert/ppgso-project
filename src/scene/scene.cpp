@@ -41,6 +41,7 @@ void Scene::render() {
 }
 
 void Scene::setTargetPosition(const glm::vec3 &position) {
+    targetPosition = position;
     camera->position = position;
 }
 

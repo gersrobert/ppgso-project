@@ -15,6 +15,9 @@
  */
 class Scene {
 public:
+    const float VISIBILITY = 10.0f;
+    glm::vec3 targetPosition;
+
     /*!
      * Update all objects in the scene
      * @param time
@@ -40,7 +43,7 @@ public:
     std::unique_ptr<Camera> camera;
 
     // All objects to be rendered in scene
-    std::list<std::unique_ptr<Object> > objects;
+    std::list<std::unique_ptr<Object>> objects;
 
     // Keyboard state
     std::map<int, int> keyboard;

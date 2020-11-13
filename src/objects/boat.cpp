@@ -12,14 +12,14 @@ std::unique_ptr<ppgso::Shader> Boat::shader;
 
 Boat::Boat(Scene &scene) {
     // Scale the default model
-    scale *= 1.0f;
+    scale *= 0.5f;
 
     // Initialize static resources if needed
     if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("orange_boat.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("orange_boat.obj");
 
-    position.y -= 2.1f;
+    position.y -= 1.05f;
     rotation.y =  -0.15f;
 }
 

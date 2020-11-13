@@ -11,9 +11,7 @@
 
 class VertexObject : public Object {
 protected:
-    // Static resources (Shared between instances)
-    std::unique_ptr<ppgso::Shader> shader;
-    std::unique_ptr<ppgso::Texture> texture;
+    static std::unique_ptr<ppgso::Shader> shader;
 
     struct face {
         GLuint v0, v1, v2;

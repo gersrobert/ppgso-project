@@ -4,44 +4,45 @@
 #include <cmake-build-debug/shaders/texture_frag_glsl.h>
 #include "water.h"
 
-Water::Water(Scene &scene) {
-    shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
-    texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("water_1.bmp"));
+std::unique_ptr<ppgso::Texture> Water::texture;
+std::unique_ptr<ppgso::Shader> VertexObject::shader;
 
-    const float size = 1000;
+Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
+    if (!shader) shader = std::make_unique<ppgso::Shader>(texture_vert_glsl, texture_frag_glsl);
+    if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("water_1.bmp"));
+
     vertices = {
-            {-size,0, -size},
-            {-size,0, size},
-            {size, 0, -size},
-            {size, 0, size},
-            {-size,-2, -size},
-            {-size,-2, size},
-            {size, -2, -size},
-            {size, -2, size},
+            {
+                    -chunk.size + chunk.size * chunk.position.x * 2.0,
+                    0,
+                    -chunk.size + chunk.size * chunk.position.y * 2.0
+            },
+            {       -chunk.size + chunk.size * chunk.position.x * 2.0,
+                    0,
+                    chunk.size + chunk.size * chunk.position.y * 2.0
+            },
+            {       chunk.size + chunk.size * chunk.position.x * 2.0,
+                    0,
+                    -chunk.size + chunk.size * chunk.position.y * 2.0
+            },
+            {       chunk.size + chunk.size * chunk.position.x * 2.0,
+                    0,
+                    chunk.size + chunk.size * chunk.position.y * 2.0
+            },
     };
     texCoords = {
-            {0, 0},
-            {0, size/10},
-            {size/10,  0},
-            {size/10,  size/10},
-            {0, 0},
-            {0, size/10},
-            {size/10,  0},
-            {size/10,  size/10},
+            {0,               0},
+            {0,               chunk.size / 10},
+            {chunk.size / 10, 0},
+            {chunk.size / 10, chunk.size / 10},
     };
     normals = {
             {0, 1, 0},
             {0, 1, 0},
             {0, 1, 0},
             {0, 1, 0},
-            {0, 1, 0},
-            {0, 1, 0},
-            {0, 1, 0},
-            {0, 1, 0},
     };
     faces = {
-//            {4, 5, 6},
-//            {5, 6, 7},
             {0, 1, 3},
             {0, 3, 2},
     };
@@ -60,7 +61,7 @@ bool Water::update(Scene &scene, float dt) {
     textureOffset.y -= 0.025f * dt;
 
     generateModelMatrix();
-    return true;
+    return chunk.isActive;
 }
 
 void Water::render(Scene &scene) {
@@ -76,7 +77,7 @@ void Water::render(Scene &scene) {
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
-    shader->setUniform("Transparency", 0.5f);
+    shader->setUniform("Transparency", 0.75f);
     shader->setUniform("TextureOffset", textureOffset);
     shader->setUniform("CameraPosition", scene.camera->position);
 
