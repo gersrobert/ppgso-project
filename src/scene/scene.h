@@ -15,8 +15,10 @@
  */
 class Scene {
 public:
-    const float VISIBILITY = 10.0f;
+    const float VISIBILITY = 200.0f;
+
     glm::vec3 targetPosition;
+    glm::vec2 windDirection = {1, -2};
 
     /*!
      * Update all objects in the scene
@@ -49,7 +51,7 @@ public:
     std::map<int, int> keyboard;
 
     // Lights, in this case using only simple directional diffuse lighting
-    glm::vec3 lightDirection{0.0f, 1.0f, -1.0f};
+    glm::vec3 lightDirection{-1.0f, 1.0f, -1.0f};
 
     // Store cursor state
     struct {

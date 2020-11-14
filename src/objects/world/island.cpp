@@ -22,12 +22,12 @@ Island::Island(Scene &scene, Chunk &chunk) : chunk(chunk) {
             glm::linearRand(
                     -chunk.size + chunk.size * chunk.position.x * 2,
                     chunk.size + chunk.size * chunk.position.x * 2),
-            -0.1f,
+            -1.0f,
             glm::linearRand(
                     -chunk.size + chunk.size * chunk.position.y * 2,
                     chunk.size + chunk.size * chunk.position.y * 2)
     };
-    scale *= 10;
+    scale *= 100;
     rotation.z = glm::linearRand(0.0f, ppgso::PI * 2);
 }
 

@@ -57,8 +57,8 @@ Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
 }
 
 bool Water::update(Scene &scene, float dt) {
-    textureOffset.x += 0.0125f * dt;
-    textureOffset.y -= 0.025f * dt;
+    textureOffset.x += scene.windDirection.x * 0.0125f * dt;
+    textureOffset.y += scene.windDirection.y * 0.0125f * dt;
 
     generateModelMatrix();
     return chunk.isActive;

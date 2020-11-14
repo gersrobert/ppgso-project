@@ -33,7 +33,7 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY * 100);
+        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY);
         camera->offset.z = camera->distance;
         camera->offset.y = -7.0f;
         scene.camera = move(camera);
@@ -71,15 +71,6 @@ public:
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
-
-        glEnable(GL_FOG);
-        glFogi(GL_FOG_MODE, GL_EXP2);
-        GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
-        glFogfv(GL_FOG_COLOR, fogColor);
-        glFogf(GL_FOG_DENSITY, 0.3f);
-        glHint(GL_FOG_HINT, GL_NICEST);
-        glFogf(GL_FOG_START, 10);
-        glFogf(GL_FOG_END, 100);
 
         initScene();
     }
