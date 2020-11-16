@@ -3,6 +3,7 @@
 #include <cmake-build-debug/shaders/texture_frag_glsl.h>
 #include <cmake-build-debug/shaders/diffuse_vert_glsl.h>
 #include <cmake-build-debug/shaders/diffuse_frag_glsl.h>
+#include <cmake-build-debug/shaders/volumetric_cloud_frag_glsl.h>
 #include "island.h"
 #include "src/scene/scene.h"
 

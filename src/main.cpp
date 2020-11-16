@@ -6,6 +6,8 @@
 #include <src/objects/world/water.h>
 #include <src/objects/world/island.h>
 #include <src/objects/world/chunk.h>
+#include <src/objects/sky/sun.h>
+#include <src/objects/sky/cloud.h>
 
 #include "src/scene/camera.h"
 #include "src/scene/scene.h"
@@ -33,10 +35,16 @@ private:
         scene.objects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(60.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY);
+        auto camera = std::make_unique<Camera>(80.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY);
         camera->offset.z = camera->distance;
         camera->offset.y = -7.0f;
         scene.camera = move(camera);
+
+        auto sun = std::make_unique<Sun>(scene);
+        scene.objects.push_back(move(sun));
+
+        auto cloud = std::make_unique<Cloud>(scene);
+        scene.objects.push_back(move(cloud));
 
         auto player = std::make_unique<Boat>(scene);
         scene.objects.push_back(move(player));
