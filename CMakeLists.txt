@@ -103,7 +103,7 @@ target_include_directories(ppgso PUBLIC
 #
 
 # Playground target
-add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat.cpp src/scene/camera.cpp src/objects/bezier_waves.cpp src/objects/wave.cpp src/objects/rudder.cpp src/objects/rudder.h src/objects/world/water.cpp src/objects/world/water.h src/objects/world/island.cpp src/objects/world/island.h src/scene/vertex_object.cpp src/scene/vertex_object.h src/util/bezier.cpp src/util/bezier.h src/objects/world/chunk.cpp src/objects/world/chunk.h src/objects/sky/sun.cpp src/objects/sky/sun.h src/objects/sky/cloud.cpp src/objects/sky/cloud.h)
+add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat.cpp src/scene/camera.cpp src/objects/bezier_waves.cpp src/objects/wave.cpp src/objects/rudder.cpp src/objects/rudder.h src/objects/world/water.cpp src/objects/world/water.h src/objects/world/island.cpp src/objects/world/island.h src/scene/vertex_object.cpp src/scene/vertex_object.h src/util/bezier.cpp src/util/bezier.h src/objects/world/chunk.cpp src/objects/world/chunk.h src/objects/sky/sun.cpp src/objects/sky/sun.h src/objects/sky/cloud.cpp src/objects/sky/cloud.h src/objects/world/tree.cpp src/objects/world/tree.h)
 target_link_libraries(main ppgso shaders)
 install (TARGETS main DESTINATION .)
 

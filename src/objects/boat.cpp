@@ -32,17 +32,16 @@ bool Boat::update(Scene &scene, float dt) {
     }
 
     // Keyboard controls
+    if (rotationSpeed > 0) {
+        rotationSpeed -=  0.001f * dt;
+    } else {
+        rotationSpeed += 0.001f * dt;
+    }
     if (scene.keyboard[GLFW_KEY_D]) {
-        rotationSpeed -= 0.002f * dt;
+        rotationSpeed -= 0.003f * dt;
     }
     else if (scene.keyboard[GLFW_KEY_A]) {
-        rotationSpeed += 0.002f * dt;
-    } else {
-        if (rotationSpeed > 0) {
-            rotationSpeed -=  0.001f * dt;
-        } else {
-            rotationSpeed += 0.001f * dt;
-        }
+        rotationSpeed += 0.003f * dt;
     }
 
     const float maxRotation = 0.005f;

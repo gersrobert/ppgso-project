@@ -6,6 +6,7 @@
 #include <cmake-build-debug/shaders/volumetric_cloud_frag_glsl.h>
 #include "island.h"
 #include "src/scene/scene.h"
+#include "tree.h"
 
 std::unique_ptr<ppgso::Mesh> Island::mesh;
 std::unique_ptr<ppgso::Texture> Island::texture;
@@ -21,15 +22,26 @@ Island::Island(Scene &scene, Chunk &chunk) : chunk(chunk) {
 
     position = {
             glm::linearRand(
-                    -chunk.size + chunk.size * chunk.position.x * 2,
-                    chunk.size + chunk.size * chunk.position.x * 2),
+                    -chunk.size + chunk.size * chunk.position.x * 1.8f,
+                    chunk.size + chunk.size * chunk.position.x * 1.8f),
             -1.0f,
             glm::linearRand(
-                    -chunk.size + chunk.size * chunk.position.y * 2,
-                    chunk.size + chunk.size * chunk.position.y * 2)
+                    -chunk.size + chunk.size * chunk.position.y * 1.8f,
+                    chunk.size + chunk.size * chunk.position.y * 1.8f)
     };
     scale *= 100;
     rotation.z = glm::linearRand(0.0f, ppgso::PI * 2);
+
+    for (size_t i = 0; i < glm::linearRand(0, 3); ++i) {
+        glm::vec3 pos = position + glm::vec3{
+            glm::linearRand(-5.0f + float(i) * 5.0f, -5.0f + float(i+1) * 5.0f),
+            2,
+            glm::linearRand(-5.0f + float(i) * 5.0f, -5.0f + float(i+1) * 5.0f),
+        };
+
+        auto tree = std::make_unique<Tree>(scene, chunk, pos);
+        scene.objects.push_back(move(tree));
+    }
 }
 
 bool Island::update(Scene &scene, float dt) {

@@ -19,19 +19,19 @@ bool Chunk::update(Scene &scene, float dt) {
         auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x - 3, position.y});
         scene.objects.push_back(move(chunk));
     }
-    if (scene.targetPosition.x > size + size * (position.x + 1) * 2) {
+    else if (scene.targetPosition.x > size + size * (position.x + 1) * 2) {
         isActive = false;
 
         auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x + 3, position.y});
         scene.objects.push_back(move(chunk));
     }
-    if (scene.targetPosition.z < -size + size * (position.y - 1) * 2) {
+    else if (scene.targetPosition.z < -size + size * (position.y - 1) * 2) {
         isActive = false;
 
         auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x, position.y - 3});
         scene.objects.push_back(move(chunk));
     }
-    if (scene.targetPosition.z > size + size * (position.y + 1) * 2) {
+    else if (scene.targetPosition.z > size + size * (position.y + 1) * 2) {
         isActive = false;
 
         auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x, position.y + 3});
