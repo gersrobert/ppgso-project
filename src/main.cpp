@@ -62,7 +62,7 @@ public:
      * Construct custom game window
      */
     SceneWindow(const int width, const int height) : Window{"playground", width, height} {
-        srand(time(NULL));
+        srand(time(nullptr));
 
         //hideCursor();
         glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
