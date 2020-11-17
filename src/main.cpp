@@ -80,6 +80,8 @@ public:
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
 
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
         initScene();
     }
 

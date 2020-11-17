@@ -1,4 +1,4 @@
-#version 330
+#version 440
 // The inputs will be fed by the vertex buffer objects
 layout(location = 0) in vec3 Position;
 layout(location = 4) in vec3 Color;

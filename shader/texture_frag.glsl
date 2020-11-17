@@ -1,4 +1,4 @@
-#version 330
+#version 440
 // A texture is expected as program attribute
 uniform sampler2D Texture;
 

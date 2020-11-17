@@ -14,6 +14,8 @@ private:
     Chunk &chunk;
 
     glm::vec2 textureOffset = {0, 0};
+    float time = 0;
+
 public:
 
     explicit Water(Scene &scene, Chunk &chunk);

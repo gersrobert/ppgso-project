@@ -19,8 +19,9 @@ Boat::Boat(Scene &scene) {
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("orange_boat.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("orange_boat.obj");
 
-    position.y -= 1.05f;
+    position.y -= 1.2f;
     rotation.y =  -0.15f;
+    rotation.x = -0.015f;
 }
 
 bool Boat::update(Scene &scene, float dt) {
