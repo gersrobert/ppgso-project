@@ -11,7 +11,7 @@
 
 #include "src/scene/camera.h"
 #include "src/scene/scene.h"
-#include "src/objects/boat.h"
+#include "src/objects/boat/boat.h"
 #include "src/objects/bezier_waves.h"
 #include "src/objects/wave.h"
 

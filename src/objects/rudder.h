@@ -10,7 +10,7 @@
 #include <texture.h>
 #include <mesh.h>
 #include <shader.h>
-#include "boat.h"
+#include "src/objects/boat/boat.h"
 
 class Rudder final : public Object {
 private:

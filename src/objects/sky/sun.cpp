@@ -18,7 +18,7 @@ bool Sun::update(Scene &scene, float dt) {
     position = scene.targetPosition + (100.0f * scene.lightDirection);
 
     generateModelMatrix();
-    return true;
+    return isActive;
 }
 
 void Sun::render(Scene &scene) {

@@ -3,7 +3,7 @@
 //
 
 #include "rudder.h"
-#include "boat.h"
+#include "src/objects/boat/boat.h"
 #include "src/scene/scene.h"
 
 #include <shaders/diffuse_vert_glsl.h>

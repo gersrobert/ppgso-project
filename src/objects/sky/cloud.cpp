@@ -17,7 +17,7 @@ Cloud::Cloud(Scene &scene) {
 
 bool Cloud::update(Scene &scene, float dt) {
     generateModelMatrix();
-    return true;
+    return isActive;
 }
 
 void Cloud::render(Scene &scene) {

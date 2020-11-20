@@ -1,0 +1,35 @@
+#version 440
+// The inputs will be fed by the vertex buffer objects
+layout(location = 0) in vec3 Position;
+layout(location = 1) in vec2 TexCoord;
+layout(location = 2) in vec3 Normal;
+
+// Matrices as program attributes
+uniform mat4 ProjectionMatrix;
+uniform mat4 ViewMatrix;
+uniform mat4 ModelMatrix;
+uniform float sailRotation;
+
+// This will be passed to the fragment shader
+out vec2 texCoord;
+out vec4 worldPosition;
+
+// Normal to pass to the fragment shader
+out vec4 normal;
+
+void main() {
+  vec3 pos = Position;
+  if (Position.z < 0.5 && Position.y < 0.5) {
+    pos.x += sailRotation;
+  }
+
+  // Copy the input to the fragment shader
+  texCoord = TexCoord;
+
+  // Normal in world coordinates
+  normal = normalize(ModelMatrix * vec4(Normal, 0.0f));
+  worldPosition = ModelMatrix * vec4(pos, 1.0);
+
+  // Calculate the final position on screen
+  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(pos, 1.0);
+}

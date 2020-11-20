@@ -57,42 +57,6 @@ Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
         }
     }
 
-//    vertices = {
-//            {
-//                    -chunk.size + chunk.size * chunk.position.x * 2.0,
-//                    0,
-//                    -chunk.size + chunk.size * chunk.position.y * 2.0
-//            },
-//            {       -chunk.size + chunk.size * chunk.position.x * 2.0,
-//                    0,
-//                    chunk.size + chunk.size * chunk.position.y * 2.0
-//            },
-//            {       chunk.size + chunk.size * chunk.position.x * 2.0,
-//                    0,
-//                    -chunk.size + chunk.size * chunk.position.y * 2.0
-//            },
-//            {       chunk.size + chunk.size * chunk.position.x * 2.0,
-//                    0,
-//                    chunk.size + chunk.size * chunk.position.y * 2.0
-//            },
-//    };
-//    texCoords = {
-//            {0,               0},
-//            {0,               chunk.size / 10},
-//            {chunk.size / 10, 0},
-//            {chunk.size / 10, chunk.size / 10},
-//    };
-//    normals = {
-//            {0, 1, 0},
-//            {0, 1, 0},
-//            {0, 1, 0},
-//            {0, 1, 0},
-//    };
-//    faces = {
-//            {0, 1, 3},
-//            {0, 3, 2},
-//    };
-
     // Copy data to OpenGL
     glBindVertexArray(vao);
     setVertexBuffer();

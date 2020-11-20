@@ -16,6 +16,8 @@ class Scene;
  */
 class Object {
 public:
+    bool isActive = true;
+
     // Define default constructors as this is an abstract class
     Object() = default;
 
