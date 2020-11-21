@@ -9,7 +9,12 @@ std::unique_ptr<ppgso::Texture> BoatWheel::texture;
 std::unique_ptr<ppgso::Shader> BoatWheel::shader;
 
 BoatWheel::BoatWheel(Scene &scene, Boat &boat) : boat(boat) {
-    if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = diffuse_vert_glsl;
+        shaderConfig.fs = diffuse_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("orange_boat.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("wheel.obj");
 

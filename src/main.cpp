@@ -1,19 +1,14 @@
 #include <iostream>
 #include <map>
-#include <list>
 
 #include <ppgso/ppgso.h>
 #include <src/objects/world/water.h>
-#include <src/objects/world/island.h>
 #include <src/objects/world/chunk.h>
-#include <src/objects/sky/sun.h>
 #include <src/objects/sky/cloud.h>
+#include <src/objects/sky/sun.h>
+#include <src/objects/boat/boat.h>
 
-#include "src/scene/camera.h"
 #include "src/scene/scene.h"
-#include "src/objects/boat/boat.h"
-#include "src/objects/bezier_waves.h"
-#include "src/objects/wave.h"
 
 const uint32_t WIDTH = 2560;
 const uint32_t HEIGHT = 1440;

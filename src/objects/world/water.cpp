@@ -2,7 +2,10 @@
 #include <cmake-build-debug/shaders/diffuse_frag_glsl.h>
 #include <cmake-build-debug/shaders/texture_vert_glsl.h>
 #include <cmake-build-debug/shaders/texture_frag_glsl.h>
-#include <cmake-build-debug/shaders/wave_vert_glsl.h>
+#include <cmake-build-debug/shaders/water_vert_glsl.h>
+#include <cmake-build-debug/shaders/water_tcs_glsl.h>
+#include <cmake-build-debug/shaders/water_tes_glsl.h>
+#include <cmake-build-debug/shaders/water_gs_glsl.h>
 #include "water.h"
 
 std::unique_ptr<ppgso::Texture> Water::texture;
@@ -13,10 +16,18 @@ float linearInterpolate(float x1, float x2, float t) {
 }
 
 Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
-    if (!shader) shader = std::make_unique<ppgso::Shader>(wave_vert_glsl, texture_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = water_vert_glsl;
+        shaderConfig.tcs = water_tcs_glsl;
+        shaderConfig.tes = water_tes_glsl;
+        shaderConfig.gs = water_gs_glsl;
+        shaderConfig.fs = diffuse_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("water_1.bmp"));
 
-    uint32_t samples = 1000;
+    uint32_t samples = 32;
     for (uint32_t i = 0; i < samples; ++i) {
         for (uint32_t j = 0; j < samples; ++j) {
             glm::vec3 vertex = {
@@ -42,7 +53,6 @@ Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
             normals.emplace_back(0, 1, 0);
 
             if (i > 0 && j > 0) {
-
                 faces.push_back({
                                         (i - 1) * samples + (j - 1),
                                         (i) * samples + (j - 1),
@@ -91,10 +101,12 @@ void Water::render(Scene &scene) {
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 0.75f);
     shader->setUniform("TextureOffset", textureOffset);
-    shader->setUniform("CameraPosition", scene.camera->position);
+    shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
+    shader->setUniform("viewDistance", scene.VISIBILITY);
     shader->setUniform("Time", time);
     shader->setUniform("BoatPosition", scene.targetPosition);
 
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, (GLsizei) faces.size() * 3, GL_UNSIGNED_INT, nullptr);
+    glPatchParameteri(GL_PATCH_VERTICES, 3);
+    glDrawElements(GL_PATCHES, (GLsizei) faces.size() * 3, GL_UNSIGNED_INT, nullptr);
 }

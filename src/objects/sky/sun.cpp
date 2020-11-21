@@ -8,7 +8,12 @@ std::unique_ptr<ppgso::Mesh> Sun::mesh;
 std::unique_ptr<ppgso::Shader> Sun::shader;
 
 Sun::Sun(Scene &scene) {
-    if (!shader) shader = std::make_unique<ppgso::Shader>(color_vert_glsl, color_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = color_vert_glsl;
+        shaderConfig.fs = color_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("sphere.obj");
 
     scale *= 10;

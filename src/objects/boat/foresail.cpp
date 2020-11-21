@@ -8,7 +8,12 @@ std::unique_ptr<ppgso::Texture> Foresail::texture;
 std::unique_ptr<ppgso::Shader> Foresail::shader;
 
 Foresail::Foresail(Scene &scene, Boat &boat) : boat(boat) {
-    if (!shader) shader = std::make_unique<ppgso::Shader>(foresail_diffuse_vert_glsl, diffuse_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = foresail_diffuse_vert_glsl;
+        shaderConfig.fs = diffuse_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("orange_boat.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("orange_boat_foresail.obj");
 

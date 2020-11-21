@@ -68,7 +68,8 @@ set(PPGSO_SHADER_SRC
         shader/convolution_vert.glsl shader/convolution_frag.glsl
         shader/diffuse_vert.glsl shader/diffuse_frag.glsl
         shader/texture_vert.glsl shader/texture_frag.glsl
-        shader/wave_vert.glsl shader/foresail_diffuse_vert.glsl
+        shader/water_vert.glsl shader/water_tcs.glsl shader/water_tes.glsl shader/water_gs.glsl
+        shader/foresail_diffuse_vert.glsl
         )
 add_resources(shaders ${PPGSO_SHADER_SRC})
 
@@ -104,7 +105,7 @@ target_include_directories(ppgso PUBLIC
 #
 
 # Playground target
-add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat/boat.cpp src/scene/camera.cpp src/objects/bezier_waves.cpp src/objects/wave.cpp src/objects/rudder.cpp src/objects/rudder.h src/objects/world/water.cpp src/objects/world/water.h src/objects/world/island.cpp src/objects/world/island.h src/scene/vertex_object.cpp src/scene/vertex_object.h src/util/bezier.cpp src/util/bezier.h src/objects/world/chunk.cpp src/objects/world/chunk.h src/objects/sky/sun.cpp src/objects/sky/sun.h src/objects/sky/cloud.cpp src/objects/sky/cloud.h src/objects/world/tree.cpp src/objects/world/tree.h src/objects/boat/boat_wheel.cpp src/objects/boat/boat_wheel.h src/objects/boat/foresail.cpp src/objects/boat/foresail.h src/objects/boat/mainsail.cpp src/objects/boat/mainsail.h)
+add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat/boat.cpp src/scene/camera.cpp src/objects/world/water.cpp src/objects/world/water.h src/objects/world/island.cpp src/objects/world/island.h src/scene/vertex_object.cpp src/scene/vertex_object.h src/util/bezier.cpp src/util/bezier.h src/objects/world/chunk.cpp src/objects/world/chunk.h src/objects/sky/sun.cpp src/objects/sky/sun.h src/objects/sky/cloud.cpp src/objects/sky/cloud.h src/objects/world/tree.cpp src/objects/world/tree.h src/objects/boat/boat_wheel.cpp src/objects/boat/boat_wheel.h src/objects/boat/foresail.cpp src/objects/boat/foresail.h src/objects/boat/mainsail.cpp src/objects/boat/mainsail.h)
 target_link_libraries(main ppgso shaders ${OpenMP_libomp_LIBRARY})
 install (TARGETS main DESTINATION .)
 

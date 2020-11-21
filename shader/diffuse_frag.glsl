@@ -13,12 +13,15 @@ uniform vec2 TextureOffset;
 
 uniform vec3 CameraPosition;
 
-// The vertex shader will feed this input
-in vec2 texCoord;
+uniform float specularFocus;
+uniform float specularIntensity;
 
-// Wordspace normal passed from vertex shader
-in vec4 normal;
-in vec4 worldPosition;
+// The vertex shader will feed this input
+in ShaderData {
+  vec2 texCoord;
+  vec4 worldPosition;
+  vec4 normal;
+} inData;
 
 in vec4 gl_FragCoord;
 
@@ -27,20 +30,20 @@ out vec4 FragmentColor;
 
 void main() {
   // Compute diffuse lighting
-  float diffuse = max(dot(normal, vec4(LightDirection, 1.0f)), 0.2f);
+  float diffuse = max(dot(inData.normal, vec4(LightDirection, 1.0f)), 0.2f);
 
-  vec3 reflectedVector = normalize(reflect(LightDirection, normal.xyz));
-  vec3 worldToEyeVector = normalize(CameraPosition - worldPosition.xyz);
+  vec3 reflectedVector = normalize(reflect(LightDirection, inData.normal.xyz));
+  vec3 worldToEyeVector = normalize(CameraPosition - inData.worldPosition.xyz);
   float specularFactor = dot(worldToEyeVector, reflectedVector);
 
   if (specularFactor > 0) {
-    specularFactor = pow(specularFactor, 64);
+    specularFactor = pow(specularFactor, specularFocus) * specularIntensity;
   } else {
     specularFactor = 0;
   }
 
-  // Lookup the color in Texture on coordinates given by texCoord
-  // NOTE: Texture coordinate is inverted vertically for compatibility with OBJ
-  FragmentColor = texture(Texture, vec2(texCoord.x, 1.0 - texCoord.y) + TextureOffset) * diffuse * (1 + specularFactor);
+  FragmentColor = texture(Texture, vec2(inData.texCoord.x, 1.0 - inData.texCoord.y) + TextureOffset) * diffuse * (1 + specularFactor);
   FragmentColor.a = Transparency;
+
+//  FragmentColor = vec4(1, 1, 1, 1);
 }

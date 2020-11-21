@@ -13,7 +13,12 @@ std::unique_ptr<ppgso::Texture> Island::texture;
 std::unique_ptr<ppgso::Shader> Island::shader;
 
 Island::Island(Scene &scene, Chunk &chunk) : chunk(chunk) {
-    if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = diffuse_vert_glsl;
+        shaderConfig.fs = diffuse_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("island_1.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("island_1.obj");
 

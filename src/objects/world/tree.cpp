@@ -7,7 +7,12 @@ std::unique_ptr<ppgso::Texture> Tree::texture;
 std::unique_ptr<ppgso::Shader> Tree::shader;
 
 Tree::Tree(Scene &scene, Chunk &chunk, glm::vec3 &_position) : chunk(chunk) {
-    if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = diffuse_vert_glsl;
+        shaderConfig.fs = diffuse_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("tree_1.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("tree_1.obj");
 

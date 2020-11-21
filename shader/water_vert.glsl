@@ -8,7 +8,6 @@ layout(location = 2) in vec3 Normal;
 uniform mat4 ProjectionMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ModelMatrix;
-uniform float sailRotation;
 
 // This will be passed to the fragment shader
 out ShaderData {
@@ -18,18 +17,13 @@ out ShaderData {
 } outData;
 
 void main() {
-  vec3 pos = Position;
-  if (Position.z < 0.5 && Position.y < 0.5) {
-    pos.x += sailRotation;
-  }
-
   // Copy the input to the fragment shader
   outData.texCoord = TexCoord;
 
   // Normal in world coordinates
-  outData.normal = normalize(ModelMatrix * vec4(Normal, 0.0f));
-  outData.worldPosition = ModelMatrix * vec4(pos, 1.0);
+  outData.normal = normalize(ModelMatrix * vec4(0, 1, 0, 0));
+  outData.worldPosition = ModelMatrix * vec4(Position, 1.0);
 
   // Calculate the final position on screen
-  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(pos, 1.0);
+  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(Position, 1.0);
 }

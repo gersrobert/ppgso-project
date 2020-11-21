@@ -1,6 +1,5 @@
 #include "boat.h"
 #include "src/scene/scene.h"
-#include "src/objects/rudder.h"
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
@@ -18,7 +17,12 @@ Boat::Boat(Scene &scene) {
     scale *= 0.5f;
 
     // Initialize static resources if needed
-    if (!shader) shader = std::make_unique<ppgso::Shader>(diffuse_vert_glsl, diffuse_frag_glsl);
+    if (!shader) {
+        ppgso::ShaderConfig shaderConfig;
+        shaderConfig.vs = diffuse_vert_glsl;
+        shaderConfig.fs = diffuse_frag_glsl;
+        shader = std::make_unique<ppgso::Shader>(shaderConfig);
+    }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("orange_boat.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("orange_boat_no_wheel_no_sails.obj");
 
@@ -87,6 +91,8 @@ void Boat::render(Scene &scene) {
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
     shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
+    shader->setUniform("specularFocus", 64.0f);
+    shader->setUniform("specularIntensity", 1.0f);
 
     mesh->render();
 }
