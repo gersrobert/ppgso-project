@@ -13,8 +13,11 @@ uniform vec2 TextureOffset;
 
 uniform vec3 CameraPosition;
 
+uniform float ambientIntensity = 0.2;
 uniform float specularFocus;
 uniform float specularIntensity;
+uniform float diffuseIntensity = 1.0;
+uniform float viewDistance = 0.0;
 
 // The vertex shader will feed this input
 in ShaderData {
@@ -30,7 +33,7 @@ out vec4 FragmentColor;
 
 void main() {
   // Compute diffuse lighting
-  float diffuse = max(dot(inData.normal, vec4(LightDirection, 1.0f)), 0.2f);
+  float diffuse = max(dot(inData.normal, vec4(LightDirection, 1.0f)), ambientIntensity) *diffuseIntensity ;
 
   vec3 reflectedVector = normalize(reflect(LightDirection, inData.normal.xyz));
   vec3 worldToEyeVector = normalize(CameraPosition - inData.worldPosition.xyz);
@@ -45,5 +48,11 @@ void main() {
   FragmentColor = texture(Texture, vec2(inData.texCoord.x, 1.0 - inData.texCoord.y) + TextureOffset) * diffuse * (1 + specularFactor);
   FragmentColor.a = Transparency;
 
-//  FragmentColor = vec4(1, 1, 1, 1);
+  if (viewDistance != 0) {
+    float fragDistanceFactor = distance(inData.worldPosition.xyz, CameraPosition) / (viewDistance);
+    if (fragDistanceFactor > 0.8) {
+      fragDistanceFactor = clamp(fragDistanceFactor * 5 - 4, 0, 1);
+      FragmentColor = mix(FragmentColor, vec4(.675f, .82f, .82f, 1), fragDistanceFactor);
+    }
+  }
 }

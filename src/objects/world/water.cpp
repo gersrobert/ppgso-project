@@ -27,7 +27,7 @@ Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
     }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("water_1.bmp"));
 
-    uint32_t samples = 32;
+    uint32_t samples = 16;
     for (uint32_t i = 0; i < samples; ++i) {
         for (uint32_t j = 0; j < samples; ++j) {
             glm::vec3 vertex = {
@@ -105,6 +105,10 @@ void Water::render(Scene &scene) {
     shader->setUniform("viewDistance", scene.VISIBILITY);
     shader->setUniform("Time", time);
     shader->setUniform("BoatPosition", scene.targetPosition);
+    shader->setUniform("specularFocus", 4.0f);
+    shader->setUniform("specularIntensity", 0.5f);
+    shader->setUniform("ambientIntensity", 0.0f);
+    shader->setUniform("diffuseIntensity", 0.6f);
 
     glBindVertexArray(vao);
     glPatchParameteri(GL_PATCH_VERTICES, 3);

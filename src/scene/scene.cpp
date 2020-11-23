@@ -42,7 +42,7 @@ void Scene::render() {
 
 void Scene::setTargetPosition(const glm::vec3 &position) {
     targetPosition = position;
-    camera->position = position;
+    camera->position = position + glm::vec3{0, 3, 0};
 }
 
 std::vector<Object *> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {

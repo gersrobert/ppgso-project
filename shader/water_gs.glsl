@@ -20,25 +20,31 @@ uniform float Time;
 uniform vec3 BoatPosition;
 
 void main() {
+    vec3 posses[3];
+    for (int i = 0; i < 3; i++) {
+        posses[i] = gl_in[i].gl_Position.xyz;
+        posses[i].y += 0.1f * sin(0.5f * inData[i].worldPosition.x + 0.5f * inData[i].worldPosition.z + 1 * Time);
+    }
+
+    vec3 normal = -normalize(cross(posses[1] - posses[0], posses[2] - posses[0]));
+//    vec3 normal = inData[0].normal.xyz;
+
     for (int i = 0; i < 3; i++) {
         outData.texCoord = inData[i].texCoord;
         outData.worldPosition = inData[i].worldPosition;
-        outData.normal = inData[i].normal;
+        outData.normal = vec4(normal, inData[i].normal.w);
 
-        vec4 pos = gl_in[i].gl_Position;
+//        if (inData[i].worldPosition.z - BoatPosition.z < 0) {
+//            float deltaX = inData[i].worldPosition.x - BoatPosition.x;
+//            if (deltaX < 3f && deltaX > -3f) {
+//                float y = cos(1.5f * deltaX - 0.5f);
+//                if (y > 0) {
+//                    posses[i].y -= 0.2f * y;
+//                }
+//            }
+//        }
 
-        pos.y += 0.1f * sin(0.5f * inData[i].worldPosition.x + 0.5f * inData[i].worldPosition.z + 1 * Time);
-        if (inData[i].worldPosition.z - BoatPosition.z < 0) {
-            float deltaX = inData[i].worldPosition.x - BoatPosition.x;
-            if (deltaX < 3f && deltaX > -3f) {
-                float y = cos(1.5f * deltaX - 0.5f);
-                if (y > 0) {
-                    pos.y -= 0.2f * y;
-                }
-            }
-        }
-
-        gl_Position = pos;
+        gl_Position = vec4(posses[i], gl_in[i].gl_Position.w);
         EmitVertex();
     }
 }

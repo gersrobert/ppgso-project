@@ -20,8 +20,8 @@ private:
     static std::unique_ptr<ppgso::Mesh> mesh;
     static std::unique_ptr<ppgso::Texture> texture;
 
-    float speed;
-    float rotationSpeed;
+    float speed = 0;
+    float rotationSpeed = 0;
 
     friend class BoatWheel;
     friend class Mainsail;

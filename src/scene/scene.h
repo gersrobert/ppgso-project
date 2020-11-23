@@ -15,7 +15,7 @@
  */
 class Scene {
 public:
-    const float VISIBILITY = 200.0f;
+    const float VISIBILITY = 300.0f;
 
     glm::vec3 targetPosition;
     glm::vec2 windDirection = {1, -2};

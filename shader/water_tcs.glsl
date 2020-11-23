@@ -23,11 +23,11 @@ void main() {
     outData[gl_InvocationID].normal = inData[gl_InvocationID].normal;
 
     float dist = distance(CameraPosition.xz, inData[gl_InvocationID].worldPosition.xz);
-    float tessFactor = viewDistance - dist;
+    float tessFactor = (2.0 * viewDistance) - dist;
     if (tessFactor < 0) {
         tessFactor = 1;
     } else {
-        tessFactor *= 0.15;
+        tessFactor *= 0.1;
     }
 
     if (gl_InvocationID == 0) {
