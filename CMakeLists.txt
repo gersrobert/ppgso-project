@@ -105,7 +105,7 @@ target_include_directories(ppgso PUBLIC
 #
 
 # Playground target
-add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat/boat.cpp src/scene/camera.cpp src/objects/world/water.cpp src/objects/world/water.h src/objects/world/island.cpp src/objects/world/island.h src/scene/vertex_object.cpp src/scene/vertex_object.h src/util/bezier.cpp src/util/bezier.h src/objects/world/chunk.cpp src/objects/world/chunk.h src/objects/sky/sun.cpp src/objects/sky/sun.h src/objects/sky/cloud.cpp src/objects/sky/cloud.h src/objects/world/tree.cpp src/objects/world/tree.h src/objects/boat/boat_wheel.cpp src/objects/boat/boat_wheel.h src/objects/boat/foresail.cpp src/objects/boat/foresail.h src/objects/boat/mainsail.cpp src/objects/boat/mainsail.h)
+add_executable(main src/main.cpp src/scene/object.cpp src/scene/scene.cpp src/objects/boat/boat.cpp src/scene/camera.cpp src/objects/world/water.cpp src/objects/world/water.h src/objects/world/island.cpp src/objects/world/island.h src/scene/vertex_object.cpp src/scene/vertex_object.h src/util/bezier.cpp src/util/bezier.h src/objects/world/chunk.cpp src/objects/world/chunk.h src/objects/sky/sun.cpp src/objects/sky/sun.h src/objects/sky/cloud.cpp src/objects/sky/cloud.h src/objects/world/tree.cpp src/objects/world/tree.h src/objects/boat/boat_wheel.cpp src/objects/boat/boat_wheel.h src/objects/boat/foresail.cpp src/objects/boat/foresail.h src/objects/boat/mainsail.cpp src/objects/boat/mainsail.h src/objects/boat/wind_vane.cpp src/objects/boat/wind_vane.h)
 target_link_libraries(main ppgso shaders ${OpenMP_libomp_LIBRARY})
 install (TARGETS main DESTINATION .)
 

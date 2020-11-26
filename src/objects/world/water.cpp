@@ -101,13 +101,13 @@ void Water::render(Scene &scene) {
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 0.75f);
     shader->setUniform("TextureOffset", textureOffset);
-    shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
+    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
     shader->setUniform("viewDistance", scene.VISIBILITY);
     shader->setUniform("Time", time);
     shader->setUniform("BoatPosition", scene.targetPosition);
     shader->setUniform("specularFocus", 4.0f);
-    shader->setUniform("specularIntensity", 0.5f);
-    shader->setUniform("ambientIntensity", 0.0f);
+    shader->setUniform("specularIntensity", 0.8f);
+    shader->setUniform("ambientIntensity", 0.9f);
     shader->setUniform("diffuseIntensity", 0.6f);
 
     glBindVertexArray(vao);

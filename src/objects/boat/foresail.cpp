@@ -50,8 +50,8 @@ void Foresail::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
-    shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
-    shader->setUniform("sailRotation", 1.0f);
+    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
+    shader->setUniform("sailRotation", boat.sailSheathe);
 
     mesh->render();
 }

@@ -26,8 +26,8 @@ void main() {
         posses[i].y += 0.1f * sin(0.5f * inData[i].worldPosition.x + 0.5f * inData[i].worldPosition.z + 1 * Time);
     }
 
-    vec3 normal = -normalize(cross(posses[1] - posses[0], posses[2] - posses[0]));
-//    vec3 normal = inData[0].normal.xyz;
+    vec3 normal = normalize(cross(posses[1] - posses[0], posses[2] - posses[0]));
+    normal.y *= -1;
 
     for (int i = 0; i < 3; i++) {
         outData.texCoord = inData[i].texCoord;

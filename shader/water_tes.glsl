@@ -15,10 +15,6 @@ out ShaderData {
 } outData;
 
 void main() {
-    outData.texCoord = inData[0].texCoord;
-    outData.worldPosition = inData[0].worldPosition;
-    outData.normal = inData[0].normal;
-
     outData.texCoord =  (gl_TessCoord.x * inData[0].texCoord) +
                         (gl_TessCoord.y * inData[1].texCoord) +
                         (gl_TessCoord.z * inData[2].texCoord);

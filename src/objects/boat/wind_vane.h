@@ -1,40 +1,26 @@
-#pragma once
+#ifndef PPGSO_WIND_VANE_H
+#define PPGSO_WIND_VANE_H
 
-#include <ppgso/ppgso.h>
+#include <src/scene/object.h>
+#include <src/scene/scene.h>
+#include "boat.h"
 
-#include "src/scene/object.h"
-
-class BoatWheel;
-class Mainsail;
-class Foresail;
-class WindVane;
-
-/*!
- * Simple object representing the player
- * Reads keyboard status and manipulates its own position
- * On Update checks collisions with Asteroid objects in the scene
- */
-class Boat final : public Object {
+class WindVane final : public Object {
 private:
     // Static resources (Shared between instances)
     static std::unique_ptr<ppgso::Shader> shader;
     static std::unique_ptr<ppgso::Mesh> mesh;
     static std::unique_ptr<ppgso::Texture> texture;
 
-    float speed = 1.0;
-    float rotationSpeed = 0;
-    float sailSheathe = 0.5f;
-
-    friend class BoatWheel;
-    friend class Mainsail;
-    friend class Foresail;
-    friend class WindVane;
+    Boat &boat;
+    glm::vec3 offset;
+    float spin = 0;
 
 public:
     /*!
      * Create a new player
      */
-    Boat(Scene &scene);
+    WindVane(Scene &scene, Boat &boat);
 
     /*!
      * Update player position considering keyboard inputs
@@ -52,3 +38,4 @@ public:
 
 };
 
+#endif //PPGSO_WIND_VANE_H

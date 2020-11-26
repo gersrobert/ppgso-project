@@ -14,6 +14,8 @@ class Camera {
 public:
     glm::vec3 position{0, 0, 0};
     glm::vec3 offset{0, 0, 0};
+    glm::vec3 rotation{0, 0, 0};
+
     float distance = 10;
 
     glm::vec3 up{0, 1, 0};
@@ -43,5 +45,7 @@ public:
      * @return Normalized vector from camera position to position on the camera projection plane
      */
     glm::vec3 cast(double u, double v);
+
+    glm::vec3 getTotalPosition() const;
 };
 

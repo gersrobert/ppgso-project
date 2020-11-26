@@ -17,6 +17,7 @@ uniform float ambientIntensity = 0.2;
 uniform float specularFocus;
 uniform float specularIntensity;
 uniform float diffuseIntensity = 1.0;
+
 uniform float viewDistance = 0.0;
 
 // The vertex shader will feed this input
@@ -33,9 +34,14 @@ out vec4 FragmentColor;
 
 void main() {
   // Compute diffuse lighting
-  float diffuse = max(dot(inData.normal, vec4(LightDirection, 1.0f)), ambientIntensity) *diffuseIntensity ;
+  float diffuse = max(dot(inData.normal, vec4(LightDirection, 1.0f)), ambientIntensity) * diffuseIntensity;
 
-  vec3 reflectedVector = normalize(reflect(LightDirection, inData.normal.xyz));
+  vec3 lightDir = LightDirection;
+  lightDir.x *= -1;
+  lightDir.y *= -1;
+  lightDir.z *= -1;
+
+  vec3 reflectedVector = normalize(reflect(lightDir, inData.normal.xyz));
   vec3 worldToEyeVector = normalize(CameraPosition - inData.worldPosition.xyz);
   float specularFactor = dot(worldToEyeVector, reflectedVector);
 

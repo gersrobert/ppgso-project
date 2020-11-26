@@ -10,7 +10,7 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 }
 
 void Camera::update() {
-    viewMatrix = glm::lookAt(position - offset, position - back, up);
+    viewMatrix = glm::lookAt(getTotalPosition(), position - back, up);
 }
 
 glm::vec3 Camera::cast(double u, double v) {
@@ -28,4 +28,8 @@ glm::vec3 Camera::cast(double u, double v) {
     // Create direction vector
     auto direction = glm::normalize(planePosition - glm::vec4{offset, 1.0f});
     return glm::vec3{direction};
+}
+
+glm::vec3 Camera::getTotalPosition() const {
+    return position + (distance * (+ rotation));
 }

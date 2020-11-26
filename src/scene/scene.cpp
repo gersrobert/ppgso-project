@@ -4,19 +4,19 @@ void Scene::update(float time) {
     static float camLeftRight = 0;
     if (keyboard[GLFW_KEY_RIGHT]) {
         camLeftRight += 0.75f * time;
-        camera->offset.x = std::sin(camLeftRight) * camera->distance;
-        camera->offset.z = std::cos(camLeftRight) * camera->distance;
+        camera->offset.x = camLeftRight;
+        camera->offset.z = camLeftRight;
     }
     if (keyboard[GLFW_KEY_LEFT]) {
         camLeftRight -= 0.75f * time;
-        camera->offset.x = std::sin(camLeftRight) * camera->distance;
-        camera->offset.z = std::cos(camLeftRight) * camera->distance;
+        camera->offset.x = camLeftRight;
+        camera->offset.z = camLeftRight;
     }
     if (keyboard[GLFW_KEY_UP]) {
-        camera->offset.y -= 0.1f;
+        camera->offset.y -= 0.01f;
     }
     if (keyboard[GLFW_KEY_DOWN]) {
-        camera->offset.y += 0.1f;
+        camera->offset.y += 0.01f;
     }
 
     camera->update();
@@ -40,9 +40,10 @@ void Scene::render() {
         obj->render(*this);
 }
 
-void Scene::setTargetPosition(const glm::vec3 &position) {
+void Scene::setTargetPosition(const glm::vec3 &position, const glm::vec3 &rotation) {
     targetPosition = position;
     camera->position = position + glm::vec3{0, 3, 0};
+    camera->rotation = {-std::sin(rotation.z + camera->offset.x), camera->offset.y, -std::cos(rotation.z + camera->offset.z)};
 }
 
 std::vector<Object *> Scene::intersect(const glm::vec3 &position, const glm::vec3 &direction) {

@@ -31,8 +31,6 @@ private:
 
         // Create a camera
         auto camera = std::make_unique<Camera>(80.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY);
-        camera->offset.z = camera->distance;
-        camera->offset.y = -7.0f;
         scene.camera = move(camera);
 
         auto sun = std::make_unique<Sun>(scene);

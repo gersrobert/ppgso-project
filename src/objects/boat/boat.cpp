@@ -6,6 +6,7 @@
 #include "boat_wheel.h"
 #include "mainsail.h"
 #include "foresail.h"
+#include "wind_vane.h"
 
 // shared resources
 std::unique_ptr<ppgso::Mesh> Boat::mesh;
@@ -32,9 +33,11 @@ Boat::Boat(Scene &scene) {
     scene.objects.push_back(move(mainsail));
     auto foresail = std::make_unique<Foresail>(scene, *this);
     scene.objects.push_back(move(foresail));
+    auto vane = std::make_unique<WindVane>(scene, *this);
+    scene.objects.push_back(move(vane));
 
-    position.y -= 1.2f;
-    rotation.y =  -0.15f;
+    position.y -= 1.1f;
+//    rotation.y =  -0.15f;
     rotation.x = -0.015f;
 }
 
@@ -47,6 +50,19 @@ bool Boat::update(Scene &scene, float dt) {
     }
 
     // Keyboard controls
+    if (scene.keyboard[GLFW_KEY_W]) {
+        sailSheathe += dt;
+    }
+    if (scene.keyboard[GLFW_KEY_S]) {
+        sailSheathe -= dt;
+    }
+    if (sailSheathe > 1) {
+        sailSheathe = 1;
+    }
+    if (sailSheathe < 0) {
+        sailSheathe = 0;
+    }
+
     if (rotationSpeed > 0) {
         rotationSpeed -=  0.001f * dt;
     } else {
@@ -67,11 +83,13 @@ bool Boat::update(Scene &scene, float dt) {
         rotationSpeed = -maxRotation;
     }
 
-    rotation.z += rotationSpeed;
-    position.z += 0.05f * std::cos(rotation.z);
-    position.x += 0.05f * std::sin(rotation.z);
+    rotation.z += rotationSpeed * speed;
+    position.z += 0.05f * speed * std::cos(rotation.z);
+    position.x += 0.05f * speed * std::sin(rotation.z);
 
-    scene.setTargetPosition(position);
+    rotation.y = 0.15f * std::cos(rotation.z);
+
+    scene.setTargetPosition(position, rotation);
     generateModelMatrix();
     return isActive;
 }
@@ -90,7 +108,7 @@ void Boat::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
-    shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
+    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
     shader->setUniform("specularFocus", 64.0f);
     shader->setUniform("specularIntensity", 1.0f);
 

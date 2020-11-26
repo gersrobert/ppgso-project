@@ -39,7 +39,7 @@ void Cloud::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 0.5f);
-    shader->setUniform("CameraPosition", scene.camera->position + scene.camera->offset);
+    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
 
     mesh->render();
 }
