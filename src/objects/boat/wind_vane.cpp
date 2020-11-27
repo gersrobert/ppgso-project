@@ -18,9 +18,8 @@ WindVane::WindVane(Scene &scene, Boat &boat) : boat(boat) {
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("wind_vane.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("wind_vane.obj");
 
-    scale *= 0.2;
+    scale *= 0.15;
     scale.y *= 0.5f;
-    scale.z *= 1.0f;
 
     offset = {0, 9.725, 0.525};
 }

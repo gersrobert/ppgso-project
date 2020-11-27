@@ -106,9 +106,9 @@ void Water::render(Scene &scene) {
     shader->setUniform("Time", time);
     shader->setUniform("BoatPosition", scene.targetPosition);
     shader->setUniform("specularFocus", 4.0f);
-    shader->setUniform("specularIntensity", 0.8f);
+    shader->setUniform("specularIntensity", 0.0f);
     shader->setUniform("ambientIntensity", 0.9f);
-    shader->setUniform("diffuseIntensity", 0.6f);
+    shader->setUniform("diffuseIntensity", 1.0f);
 
     glBindVertexArray(vao);
     glPatchParameteri(GL_PATCH_VERTICES, 3);

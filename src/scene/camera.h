@@ -1,9 +1,9 @@
 #pragma once
-
 #include <memory>
-
 #include <glm/glm.hpp>
 #include <ppgso/ppgso.h>
+
+class Scene;
 
 /*!
  * Simple camera object that keeps track of viewMatrix and projectionMatrix
@@ -24,6 +24,9 @@ public:
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
+    enum Mode {THIRD_PERSON, FIRST_PERSON, CINEMATIC};
+    Mode cameraMode;
+
     /*!
      * Create new Camera that will generate viewMatrix and projectionMatrix based on its position, up and back vectors
      * @param fov - Field of view in degrees
@@ -36,7 +39,7 @@ public:
     /*!
      * Update Camera viewMatrix based on up, position and back vectors
      */
-    void update();
+    void update(Scene &scene, float time);
 
     /*!
      * Get direction vector in world coordinates through camera projection plane
@@ -47,5 +50,10 @@ public:
     glm::vec3 cast(double u, double v);
 
     glm::vec3 getTotalPosition() const;
+
+private:
+    void moveFirstPerson(Scene &scene, float time);
+    void moveThirdPerson(Scene &scene, float time);
+    void moveCinematic(Scene &scene, float time);
 };
 

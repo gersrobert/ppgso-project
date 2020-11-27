@@ -1,25 +1,7 @@
 #include "scene.h"
 
 void Scene::update(float time) {
-    static float camLeftRight = 0;
-    if (keyboard[GLFW_KEY_RIGHT]) {
-        camLeftRight += 0.75f * time;
-        camera->offset.x = camLeftRight;
-        camera->offset.z = camLeftRight;
-    }
-    if (keyboard[GLFW_KEY_LEFT]) {
-        camLeftRight -= 0.75f * time;
-        camera->offset.x = camLeftRight;
-        camera->offset.z = camLeftRight;
-    }
-    if (keyboard[GLFW_KEY_UP]) {
-        camera->offset.y -= 0.01f;
-    }
-    if (keyboard[GLFW_KEY_DOWN]) {
-        camera->offset.y += 0.01f;
-    }
-
-    camera->update();
+    camera->update(*this, time);
 
     // Use iterator to update all objects so we can remove while iterating
     auto i = std::begin(objects);
