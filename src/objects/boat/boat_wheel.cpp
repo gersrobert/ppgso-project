@@ -1,6 +1,7 @@
 #include <cmake-build-debug/shaders/diffuse_vert_glsl.h>
 #include <cmake-build-debug/shaders/diffuse_frag_glsl.h>
 #include <dependencies/include/glm/gtx/euler_angles.hpp>
+#include <src/scene/scenes/game_scene.h>
 #include "boat_wheel.h"
 
 
@@ -19,7 +20,7 @@ BoatWheel::BoatWheel(Scene &scene, Boat &boat) : boat(boat) {
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("wheel.obj");
 
     scale = boat.scale;
-    offset = {0, 1.7, -2.15};
+    offset = {0, 1.75, -2.15};
 }
 
 bool BoatWheel::update(Scene &scene, float dt) {
@@ -30,6 +31,7 @@ bool BoatWheel::update(Scene &scene, float dt) {
                   * glm::translate(glm::mat4(1), -offset)
                   * glm::rotate(glm::mat4(1), boat.rotation.z, {0, 1, 0})
                   * glm::rotate(glm::mat4(1), boat.rotation.y, {0, 0, 1})
+                  * glm::rotate(glm::mat4(1), boat.rotation.x, {1, 0, 0})
                   * glm::translate(glm::mat4(1), offset)
                   * glm::rotate(glm::mat4(1), -boat.rotationSpeed * 1000, {0, 0, 1})
                   * glm::scale(glm::mat4(1), scale);
@@ -40,18 +42,20 @@ bool BoatWheel::update(Scene &scene, float dt) {
 void BoatWheel::render(Scene &scene) {
     shader->use();
 
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
     // Set up light
-    shader->setUniform("LightDirection", scene.lightDirection);
+    shader->setUniform("LightDirection", gameScene->lightDirection);
 
     // use camera
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);
+    shader->setUniform("ViewMatrix", gameScene->camera->viewMatrix);
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
-    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
+    shader->setUniform("CameraPosition", gameScene->camera->getTotalPosition());
 
     mesh->render();
 }

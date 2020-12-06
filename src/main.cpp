@@ -4,53 +4,78 @@
 #include <ppgso/ppgso.h>
 #include <src/objects/world/water.h>
 #include <src/objects/world/chunk.h>
-#include <src/objects/sky/cloud.h>
-#include <src/objects/sky/sun.h>
 #include <src/objects/boat/boat.h>
-
-#include "src/scene/scene.h"
+#include <src/gui/compass.h>
+#include <src/objects/sky/skydome.h>
+#include <src/gui/text.h>
+#include <src/scene/scenes/game_scene.h>
+#include <src/scene/scene.h>
+#include <src/scene/scenes/menu_scene.h>
 
 const uint32_t WIDTH = 2560;
 const uint32_t HEIGHT = 1440;
+
+void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+    std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;
+}
 
 /*!
  * Custom windows for our simple game
  */
 class SceneWindow : public ppgso::Window {
 private:
-    Scene scene;
-    bool animate = true;
+    std::vector<std::shared_ptr<Scene>> scenes;
+    size_t activeScene = 0;
 
+    bool animate = true;
 
     /*!
      * Reset and initialize the game scene
      * Creating unique smart pointers to objects that are stored in the scene object list
      */
-    void initScene() {
-        scene.objects.clear();
+    void initGameScene() {
+        auto scene = std::make_shared<GameScene>();
+        scenes.push_back(scene);
+
+        scene->objects.clear();
+        scene->guiObjects.clear();
 
         // Create a camera
-        auto camera = std::make_unique<Camera>(80.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene.VISIBILITY);
-        scene.camera = move(camera);
+        auto camera = std::make_unique<Camera>(80.0f, float(WIDTH) / float(HEIGHT), 0.1f, scene->VISIBILITY);
+        scene->camera = move(camera);
+        scene->guiProjection = glm::ortho(-float(WIDTH) / float(HEIGHT), float(WIDTH) / float(HEIGHT), -1.0f, 1.0f);
 
-        auto sun = std::make_unique<Sun>(scene);
-        scene.objects.push_back(move(sun));
+        auto skydome = std::make_unique<Skydome>(*scene);
+        scene->objects.push_back(move(skydome));
 
-        auto cloud = std::make_unique<Cloud>(scene);
-        scene.objects.push_back(move(cloud));
-
-        auto player = std::make_unique<Boat>(scene);
-        scene.objects.push_back(move(player));
+        auto player = std::make_unique<Boat>(*scene);
+        scene->objects.push_back(move(player));
 
         for (int32_t i = -1; i <= 1; ++i) {
             for (int32_t j = -1; j <= 1; ++j) {
-                auto chunk = std::make_unique<Chunk>(scene, glm::vec2{i, j});
-                scene.objects.push_back(move(chunk));
+                auto chunk = std::make_unique<Chunk>(*scene, glm::vec2{i, j});
+                scene->objects.push_back(move(chunk));
             }
         }
+
+        auto compass = std::make_unique<Compass>(*scene);
+        scene->guiObjects.push_back(move(compass));
     }
 
-public:
+    void initMenuScene() {
+        auto scene = std::make_shared<MenuScene>();
+        scenes.push_back(scene);
+
+        scene->objects.clear();
+        scene->guiObjects.clear();
+
+        scene->guiProjection = glm::ortho(-float(WIDTH) / float(HEIGHT), float(WIDTH) / float(HEIGHT), -1.0f, 1.0f);
+
+        auto text = std::make_unique<Text>(*scene, "Hello world!");
+        scene->guiObjects.push_back(move(text));
+    }
+
+    public:
     /*!
      * Construct custom game window
      */
@@ -74,9 +99,12 @@ public:
         glCullFace(GL_BACK);
 
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
 //        fpsLimit(false);
-        initScene();
+
+        scenes.reserve(2);
+        activeScene = 1;
+        initMenuScene();
+        initGameScene();
     }
 
     /*!
@@ -87,7 +115,13 @@ public:
      * @param mods Additional modifiers to consider
      */
     void onKey(int key, int scanCode, int action, int mods) override {
-        scene.keyboard[key] = action;
+        scenes.at(activeScene)->keyboard[key] = action;
+
+        if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+            std::cout << action << std::endl;
+            activeScene++;
+            activeScene %= scenes.size();
+        }
     }
 
     /*!
@@ -96,8 +130,8 @@ public:
      * @param cursorY Mouse vertical position in window coordinates
      */
     void onCursorPos(double cursorX, double cursorY) override {
-        scene.cursor.x = cursorX;
-        scene.cursor.y = cursorY;
+        scenes.at(activeScene)->cursor.x = cursorX;
+        scenes.at(activeScene)->cursor.y = cursorY;
     }
 
     /*!
@@ -127,8 +161,8 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update and render all objects
-        scene.update(dt);
-        scene.render();
+        scenes.at(activeScene)->update(dt);
+        scenes.at(activeScene)->render();
     }
 };
 
@@ -136,6 +170,9 @@ int main() {
 
     // Initialize our window
     SceneWindow window(WIDTH, HEIGHT);
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(MessageCallback, nullptr);
 
     // Main execution loop
     while (window.pollEvents()) {}

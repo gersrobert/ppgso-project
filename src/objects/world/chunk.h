@@ -2,6 +2,7 @@
 #define PPGSO_CHUNK_H
 
 #include <src/scene/object.h>
+#include <src/scene/scenes/game_scene.h>
 
 class Chunk final : public Object {
 private:
@@ -12,7 +13,7 @@ public:
     const glm::vec2 position;
     bool isActive = true;
 
-    Chunk(Scene &scene, glm::vec2 position);
+    Chunk(GameScene &scene, glm::vec2 position);
 
     bool update(Scene &scene, float dt) override;
 

@@ -53,7 +53,7 @@ void main() {
     float fragDistanceFactor = distance(inData.worldPosition.xyz, CameraPosition) / (viewDistance);
     if (fragDistanceFactor > 0.8) {
       fragDistanceFactor = clamp(fragDistanceFactor * 5 - 4, 0, 1);
-      FragmentColor = mix(FragmentColor, vec4(.675f, .82f, .82f, 1), fragDistanceFactor);
+      FragmentColor = mix(FragmentColor, vec4(FragmentColor.rgb, 0), fragDistanceFactor);
     }
   }
 }

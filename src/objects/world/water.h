@@ -9,6 +9,7 @@
 
 class Water final : public VertexObject {
 private:
+    static std::unique_ptr<ppgso::Shader> shader;
     static std::unique_ptr<ppgso::Texture> texture;
 
     Chunk &chunk;

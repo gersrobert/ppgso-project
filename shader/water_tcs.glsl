@@ -15,6 +15,7 @@ out ShaderData {
 } outData[];
 
 uniform vec3 CameraPosition;
+uniform vec3 BoatPosition;
 uniform float viewDistance;
 
 void main() {
@@ -22,12 +23,12 @@ void main() {
     outData[gl_InvocationID].worldPosition = inData[gl_InvocationID].worldPosition;
     outData[gl_InvocationID].normal = inData[gl_InvocationID].normal;
 
-    float dist = distance(CameraPosition.xz, inData[gl_InvocationID].worldPosition.xz);
-    float tessFactor = (2.0 * viewDistance) - dist;
-    if (tessFactor < 0) {
-        tessFactor = 1;
-    } else {
-        tessFactor *= 0.1;
+    float dist = distance(BoatPosition.xz, inData[gl_InvocationID].worldPosition.xz);
+    float tessFactor = 1;
+    if (dist < 0.2 * viewDistance) {
+        tessFactor = 5000;
+    } else if (dist< 1.2 * viewDistance) {
+        tessFactor = 25;
     }
 
     if (gl_InvocationID == 0) {

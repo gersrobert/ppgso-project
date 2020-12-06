@@ -13,10 +13,11 @@ class Scene;
 class Camera {
 public:
     glm::vec3 position{0, 0, 0};
+    glm::vec3 positionOffset{0, 0, 0};
     glm::vec3 offset{0, 0, 0};
     glm::vec3 rotation{0, 0, 0};
 
-    float distance = 10;
+    float distance = 0;
 
     glm::vec3 up{0, 1, 0};
     glm::vec3 back{0, 0, -1};
@@ -24,7 +25,7 @@ public:
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
-    enum Mode {THIRD_PERSON, FIRST_PERSON, CINEMATIC};
+    enum Mode {THIRD_PERSON, CINEMATIC};
     Mode cameraMode;
 
     /*!
@@ -39,7 +40,7 @@ public:
     /*!
      * Update Camera viewMatrix based on up, position and back vectors
      */
-    void update(Scene &scene, float time);
+    void update(Scene &scene, float time, const glm::vec3 &targetPosition, const glm::vec3 &targetRotation);
 
     /*!
      * Get direction vector in world coordinates through camera projection plane

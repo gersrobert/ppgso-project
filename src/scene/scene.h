@@ -15,43 +15,25 @@
  */
 class Scene {
 public:
-    const float VISIBILITY = 300.0f;
-
-    glm::vec3 targetPosition;
-    glm::vec2 windDirection = {1, -2};
-
     /*!
      * Update all objects in the scene
      * @param time
      */
-    void update(float time);
+    virtual void update(float time) = 0;
 
     /*!
      * Render all objects in the scene
      */
-    void render();
-
-    /*!
-     * Pick objects using a ray
-     * @param position - Position in the scene to pick object from
-     * @param direction - Direction to pick objects from
-     * @return Objects - Vector of pointers to intersected objects
-     */
-    std::vector<Object *> intersect(const glm::vec3 &position, const glm::vec3 &direction);
-
-    void setTargetPosition(const glm::vec3 &position, const glm::vec3 &rotation);
-
-    // Camera object
-    std::unique_ptr<Camera> camera;
+    virtual void render() = 0;
 
     // All objects to be rendered in scene
     std::list<std::unique_ptr<Object>> objects;
 
+    glm::mat4 guiProjection;
+    std::list<std::unique_ptr<Object>> guiObjects;
+
     // Keyboard state
     std::map<int, int> keyboard;
-
-    // Lights, in this case using only simple directional diffuse lighting
-    glm::vec3 lightDirection{-1.0f, 1.0f, -1.0f};
 
     // Store cursor state
     struct {

@@ -11,7 +11,6 @@
 
 class VertexObject : public Object {
 protected:
-    static std::unique_ptr<ppgso::Shader> shader;
 
     struct face {
         GLuint v0, v1, v2;
@@ -33,7 +32,15 @@ protected:
         glGenBuffers(1, &nbo);
     }
 
-    void setVertexBuffer() {
+    ~VertexObject() override {
+        glDeleteVertexArrays(1, &vao);
+        glDeleteBuffers(1, &vbo);
+        glDeleteBuffers(1, &tbo);
+        glDeleteBuffers(1, &ibo);
+        glDeleteBuffers(1, &nbo);
+    }
+
+    void setVertexBuffer(std::unique_ptr<ppgso::Shader>& shader) {
         // Copy positions to gpu
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
@@ -44,7 +51,7 @@ protected:
         glVertexAttribPointer(position_attrib, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     }
 
-    void setTextureBuffer() {
+    void setTextureBuffer(std::unique_ptr<ppgso::Shader>& shader) {
         // Copy texture positions to gpu
         glBindBuffer(GL_ARRAY_BUFFER, tbo);
         glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(glm::vec2), texCoords.data(), GL_STATIC_DRAW);
@@ -55,7 +62,7 @@ protected:
         glVertexAttribPointer(texCoord_attrib, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
     }
 
-    void setNormalBuffer() {
+    void setNormalBuffer(std::unique_ptr<ppgso::Shader>& shader) {
         glBindBuffer(GL_ARRAY_BUFFER, nbo);
         glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(float), normals.data(),
                      GL_STATIC_DRAW);

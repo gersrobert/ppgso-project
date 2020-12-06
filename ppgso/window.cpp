@@ -119,8 +119,8 @@ ppgso::Window::glewInstance::glewInstance() {
     glewExperimental = GL_TRUE;
     glewInit();
 
-    if (!glewIsSupported("GL_VERSION_3_3"))
-        throw std::runtime_error("Failed to initialize GLEW with OpenGL 3.3!");
+    if (!glewIsSupported("GL_VERSION_4_4"))
+        throw std::runtime_error("Failed to initialize GLEW with OpenGL 4.4!");
 }
 
 // Store window instances for callbacks

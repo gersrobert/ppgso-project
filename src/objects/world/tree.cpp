@@ -1,5 +1,6 @@
 #include <cmake-build-debug/shaders/diffuse_vert_glsl.h>
 #include <cmake-build-debug/shaders/diffuse_frag_glsl.h>
+#include <src/scene/scenes/game_scene.h>
 #include "tree.h"
 
 std::unique_ptr<ppgso::Mesh> Tree::mesh;
@@ -31,19 +32,21 @@ bool Tree::update(Scene &scene, float dt) {
 void Tree::render(Scene &scene) {
     shader->use();
 
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
     // Set up light
-    shader->setUniform("LightDirection", scene.lightDirection);
+    shader->setUniform("LightDirection", gameScene->lightDirection);
 
     // use camera
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);
+    shader->setUniform("ViewMatrix", gameScene->camera->viewMatrix);
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
-    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
-    shader->setUniform("viewDistance", scene.VISIBILITY);
+    shader->setUniform("CameraPosition", gameScene->camera->getTotalPosition());
+    shader->setUniform("viewDistance", gameScene->VISIBILITY);
 
     mesh->render();
 }

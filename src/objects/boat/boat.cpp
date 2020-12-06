@@ -3,6 +3,7 @@
 
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
+#include <src/scene/scenes/game_scene.h>
 #include "boat_wheel.h"
 #include "mainsail.h"
 #include "foresail.h"
@@ -37,7 +38,6 @@ Boat::Boat(Scene &scene) {
     scene.objects.push_back(move(vane));
 
     position.y -= 1.1f;
-//    rotation.y =  -0.15f;
     rotation.x = -0.015f;
 }
 
@@ -51,10 +51,10 @@ bool Boat::update(Scene &scene, float dt) {
 
     // Keyboard controls
     if (scene.keyboard[GLFW_KEY_W]) {
-        sailSheathe += dt;
+        sailSheathe += dt * 0.33f;
     }
     if (scene.keyboard[GLFW_KEY_S]) {
-        sailSheathe -= dt;
+        sailSheathe -= dt * 0.33f;
     }
     if (sailSheathe > 1) {
         sailSheathe = 1;
@@ -62,6 +62,24 @@ bool Boat::update(Scene &scene, float dt) {
     if (sailSheathe < 0) {
         sailSheathe = 0;
     }
+
+    sailEffect = std::abs(std::cos(rotation.z)) - sailSheathe;
+    if (sailEffect < 0) {
+        sailEffect = -1;
+    } else {
+        sailEffect *= 1 + (20.0f * ppgso::PI/180.0f);
+        sailEffect -= 20.0f * ppgso::PI/180.0f;
+    }
+
+    acceleration = std::cos(sailEffect * ppgso::PI/2) - (0.9f * speed + 0.1f);
+    speed += 0.001f * acceleration;
+
+    static int xt = 0;
+    xt++;
+    if (xt % 144 == 0) {
+        std::cout << speed << ", " << acceleration << ", " << sailEffect << std::endl;
+    }
+
 
     if (rotationSpeed > 0) {
         rotationSpeed -=  0.001f * dt;
@@ -83,13 +101,14 @@ bool Boat::update(Scene &scene, float dt) {
         rotationSpeed = -maxRotation;
     }
 
-    rotation.z += rotationSpeed * speed;
+    rotation.z += std::fmod(rotationSpeed * speed, 2*ppgso::PI);
+
     position.z += 0.05f * speed * std::cos(rotation.z);
     position.x += 0.05f * speed * std::sin(rotation.z);
 
     rotation.y = 0.15f * std::cos(rotation.z);
 
-    scene.setTargetPosition(position, rotation);
+    dynamic_cast<GameScene*>(&scene)->setTargetPosition(position, rotation);
     generateModelMatrix();
     return isActive;
 }
@@ -97,18 +116,20 @@ bool Boat::update(Scene &scene, float dt) {
 void Boat::render(Scene &scene) {
     shader->use();
 
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
     // Set up light
-    shader->setUniform("LightDirection", scene.lightDirection);
+    shader->setUniform("LightDirection", gameScene->lightDirection);
 
     // use camera
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);
+    shader->setUniform("ViewMatrix", gameScene->camera->viewMatrix);
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
-    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
+    shader->setUniform("CameraPosition", gameScene->camera->getTotalPosition());
     shader->setUniform("specularFocus", 64.0f);
     shader->setUniform("specularIntensity", 1.0f);
 

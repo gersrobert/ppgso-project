@@ -2,7 +2,7 @@
 #include "island.h"
 #include "water.h"
 
-Chunk::Chunk(Scene &scene, glm::vec2 position) : size(scene.VISIBILITY), position(position) {
+Chunk::Chunk(GameScene &scene, glm::vec2 position) : size(scene.VISIBILITY), position(position) {
     for (size_t i = 0; i < 10; ++i) {
         auto island = std::make_unique<Island>(scene, *this);
         scene.objects.push_back(move(island));
@@ -13,28 +13,30 @@ Chunk::Chunk(Scene &scene, glm::vec2 position) : size(scene.VISIBILITY), positio
 }
 
 bool Chunk::update(Scene &scene, float dt) {
-    if (scene.targetPosition.x < -size + size * (position.x - 1) * 2) {
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
+    if (gameScene->targetPosition.x < -size + size * (position.x - 1) * 2) {
         isActive = false;
 
-        auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x - 3, position.y});
+        auto chunk = std::make_unique<Chunk>(*gameScene, glm::vec2{position.x - 3, position.y});
         scene.objects.push_back(move(chunk));
     }
-    else if (scene.targetPosition.x > size + size * (position.x + 1) * 2) {
+    else if (gameScene->targetPosition.x > size + size * (position.x + 1) * 2) {
         isActive = false;
 
-        auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x + 3, position.y});
+        auto chunk = std::make_unique<Chunk>(*gameScene, glm::vec2{position.x + 3, position.y});
         scene.objects.push_back(move(chunk));
     }
-    else if (scene.targetPosition.z < -size + size * (position.y - 1) * 2) {
+    else if (gameScene->targetPosition.z < -size + size * (position.y - 1) * 2) {
         isActive = false;
 
-        auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x, position.y - 3});
+        auto chunk = std::make_unique<Chunk>(*gameScene, glm::vec2{position.x, position.y - 3});
         scene.objects.push_back(move(chunk));
     }
-    else if (scene.targetPosition.z > size + size * (position.y + 1) * 2) {
+    else if (gameScene->targetPosition.z > size + size * (position.y + 1) * 2) {
         isActive = false;
 
-        auto chunk = std::make_unique<Chunk>(scene, glm::vec2{position.x, position.y + 3});
+        auto chunk = std::make_unique<Chunk>(*gameScene, glm::vec2{position.x, position.y + 3});
         scene.objects.push_back(move(chunk));
     }
 

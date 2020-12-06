@@ -1,13 +1,13 @@
 #version 440
-in vec3 vertexColor;
+in vec4 vertexColor;
 
 // The final color
 out vec4 FragmentColor;
 
 // Additional overall color when not using per-vertex Color input
-uniform vec3 OverallColor;
+uniform vec4 OverallColor;
 
 void main() {
   // Just pass the color to the output
-  FragmentColor = vec4(vertexColor + OverallColor, 1.0f);
+  FragmentColor = vertexColor + OverallColor;
 }

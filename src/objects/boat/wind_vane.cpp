@@ -2,6 +2,7 @@
 #include <cmake-build-debug/shaders/color_frag_glsl.h>
 #include <cmake-build-debug/shaders/diffuse_vert_glsl.h>
 #include <cmake-build-debug/shaders/diffuse_frag_glsl.h>
+#include <src/scene/scenes/game_scene.h>
 #include "wind_vane.h"
 
 std::unique_ptr<ppgso::Mesh> WindVane::mesh;
@@ -41,18 +42,20 @@ bool WindVane::update(Scene &scene, float dt) {
 void WindVane::render(Scene &scene) {
     shader->use();
 
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
     // Set up light
-    shader->setUniform("LightDirection", scene.lightDirection);
+    shader->setUniform("LightDirection", gameScene->lightDirection);
 
     // use camera
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);
+    shader->setUniform("ViewMatrix", gameScene->camera->viewMatrix);
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 1.0f);
-    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
+    shader->setUniform("CameraPosition", gameScene->camera->getTotalPosition());
     shader->setUniform("specularFocus", 32.0f);
     shader->setUniform("specularIntensity", 0.5f);
     shader->setUniform("ambientIntensity", 1.0f);

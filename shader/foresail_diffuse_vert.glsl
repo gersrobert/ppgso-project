@@ -20,8 +20,9 @@ out ShaderData {
 void main() {
   vec3 pos = Position;
   if (Position.z < 0.5 && Position.y < 0.5) {
-    pos.x -= 3 * sin(sailRotation);
-    pos.z -= 1 * cos(sailRotation) - 1;
+    pos.x -= 6 * sin(sailRotation);
+    pos.y += abs(1 * sin(sailRotation));
+    pos.z -= 3 * cos(sailRotation) - 3;
   }
 
   // Copy the input to the fragment shader

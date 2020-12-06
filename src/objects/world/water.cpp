@@ -6,16 +6,17 @@
 #include <cmake-build-debug/shaders/water_tcs_glsl.h>
 #include <cmake-build-debug/shaders/water_tes_glsl.h>
 #include <cmake-build-debug/shaders/water_gs_glsl.h>
+#include <src/scene/scenes/game_scene.h>
 #include "water.h"
 
 std::unique_ptr<ppgso::Texture> Water::texture;
-std::unique_ptr<ppgso::Shader> VertexObject::shader;
+std::unique_ptr<ppgso::Shader> Water::shader;
 
 float linearInterpolate(float x1, float x2, float t) {
     return x1 + t * (x2 - x1);
 }
 
-Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
+Water::Water(Scene &scene, Chunk &chunk) : VertexObject(), chunk(chunk) {
     if (!shader) {
         ppgso::ShaderConfig shaderConfig;
         shaderConfig.vs = water_vert_glsl;
@@ -69,18 +70,19 @@ Water::Water(Scene &scene, Chunk &chunk) : chunk(chunk) {
 
     // Copy data to OpenGL
     glBindVertexArray(vao);
-    setVertexBuffer();
-    setTextureBuffer();
-    setNormalBuffer();
+    setVertexBuffer(shader);
+    setTextureBuffer(shader);
+    setNormalBuffer(shader);
     setIndexBuffer();
-
 }
 
 bool Water::update(Scene &scene, float dt) {
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
     time += dt;
 
-    textureOffset.x += scene.windDirection.x * 0.0125f * dt;
-    textureOffset.y += scene.windDirection.y * 0.0125f * dt;
+    textureOffset.x += gameScene->windDirection.x * 0.0125f * dt;
+    textureOffset.y += gameScene->windDirection.y * 0.0125f * dt;
 
     generateModelMatrix();
     return chunk.isActive;
@@ -89,26 +91,28 @@ bool Water::update(Scene &scene, float dt) {
 void Water::render(Scene &scene) {
     shader->use();
 
+    auto gameScene = dynamic_cast<GameScene*>(&scene);
+
     // Set up light
-    shader->setUniform("LightDirection", scene.lightDirection);
+    shader->setUniform("LightDirection", gameScene->lightDirection);
 
     // use camera
-    shader->setUniform("ProjectionMatrix", scene.camera->projectionMatrix);
-    shader->setUniform("ViewMatrix", scene.camera->viewMatrix);
+    shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);
+    shader->setUniform("ViewMatrix", gameScene->camera->viewMatrix);
 
     // render mesh
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 0.75f);
     shader->setUniform("TextureOffset", textureOffset);
-    shader->setUniform("CameraPosition", scene.camera->getTotalPosition());
-    shader->setUniform("viewDistance", scene.VISIBILITY);
+    shader->setUniform("CameraPosition", gameScene->camera->getTotalPosition());
+    shader->setUniform("viewDistance", gameScene->VISIBILITY);
     shader->setUniform("Time", time);
-    shader->setUniform("BoatPosition", scene.targetPosition);
+    shader->setUniform("BoatPosition", gameScene->targetPosition);
     shader->setUniform("specularFocus", 4.0f);
-    shader->setUniform("specularIntensity", 0.0f);
+    shader->setUniform("specularIntensity", 0.8f);
     shader->setUniform("ambientIntensity", 0.9f);
-    shader->setUniform("diffuseIntensity", 1.0f);
+    shader->setUniform("diffuseIntensity", 0.8f);
 
     glBindVertexArray(vao);
     glPatchParameteri(GL_PATCH_VERTICES, 3);
