@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include <src/util/animator.h>
 #include "camera.h"
 #include "scene.h"
 
@@ -6,28 +7,6 @@ Camera::Camera(float fov, float ratio, float near, float far) {
     float fovInRad = (ppgso::PI / 180.0f) * fov;
 
     projectionMatrix = glm::perspective(fovInRad, ratio, near, far);
-}
-
-void Camera::moveFirstPerson(Scene &scene, float time) {
-    distance = 3.0;
-
-    static float camLeftRight = 0;
-    if (scene.keyboard[GLFW_KEY_RIGHT]) {
-        camLeftRight += 0.75f * time;
-        offset.x = camLeftRight;
-        offset.z = camLeftRight;
-    }
-    if (scene.keyboard[GLFW_KEY_LEFT]) {
-        camLeftRight -= 0.75f * time;
-        offset.x = camLeftRight;
-        offset.z = camLeftRight;
-    }
-    if (scene.keyboard[GLFW_KEY_UP]) {
-        offset.y += 0.01f;
-    }
-    if (scene.keyboard[GLFW_KEY_DOWN]) {
-        offset.y -= 0.01f;
-    }
 }
 
 void Camera::moveThirdPerson(Scene &scene, float time) {
@@ -54,14 +33,12 @@ void Camera::moveThirdPerson(Scene &scene, float time) {
     }
 }
 
-void Camera::moveCinematic(Scene &scene, float time) {
+void Camera::update(Scene &scene, float time) {
+    if (!initialized) {
+        initialize(scene);
+    }
 
-}
-
-void Camera::update(Scene &scene, float time, const glm::vec3 &targetPosition, const glm::vec3 &targetRotation) {
-    if (scene.keyboard[GLFW_KEY_C]) {
-        cameraMode = CINEMATIC;
-    } else if (scene.keyboard[GLFW_KEY_V]) {
+    if (scene.keyboard[GLFW_KEY_V]) {
         cameraMode = THIRD_PERSON;
         distance = -10;
     } else {
@@ -74,12 +51,8 @@ void Camera::update(Scene &scene, float time, const glm::vec3 &targetPosition, c
             moveThirdPerson(scene, time);
             break;
         case CINEMATIC:
-            moveCinematic(scene, time);
             break;
     }
-
-    position = targetPosition + positionOffset;
-    rotation = {-std::sin(targetRotation.z + offset.x), offset.y, -std::cos(targetRotation.z + offset.z)};
 
     viewMatrix = glm::lookAt(getTotalPosition(), position - back, up);
 }
@@ -103,4 +76,17 @@ glm::vec3 Camera::cast(double u, double v) {
 
 glm::vec3 Camera::getTotalPosition() const {
     return (position) + (distance * (rotation));
+}
+
+void Camera::moveTo(const glm::vec3 &pos, const glm::vec3 &rot) {
+    position = pos + positionOffset;
+    rotation = {-std::sin(rot.z + offset.x), offset.y, -std::cos(rot.z + offset.z)};
+}
+
+void Camera::initialize(Scene &scene) {
+    initialized = true;
+
+    offset.y = 20;
+    auto animator = std::make_unique<Animator>(offset, glm::vec3{0, 0, 0}, 2.0f);
+    scene.executables.push_back(move(animator));
 }

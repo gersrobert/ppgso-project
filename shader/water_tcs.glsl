@@ -25,8 +25,8 @@ void main() {
 
     float dist = distance(BoatPosition.xz, inData[gl_InvocationID].worldPosition.xz);
     float tessFactor = 1;
-    if (dist < 0.2 * viewDistance) {
-        tessFactor = 5000;
+    if (dist < 0.3 * viewDistance) {
+        tessFactor = 10000;
     } else if (dist< 1.2 * viewDistance) {
         tessFactor = 25;
     }

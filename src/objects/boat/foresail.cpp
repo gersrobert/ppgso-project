@@ -23,8 +23,8 @@ Foresail::Foresail(Scene &scene, Boat &boat) : boat(boat) {
 }
 
 bool Foresail::update(Scene &scene, float dt) {
-    position = boat.position + offset;
-    rotation = boat.rotation;
+    translateTo(boat.position + offset);
+    rotateTo(boat.rotation);
 
     modelMatrix = glm::translate(glm::mat4(1), position)
                   * glm::translate(glm::mat4(1), -offset)

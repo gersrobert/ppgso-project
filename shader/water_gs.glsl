@@ -23,16 +23,7 @@ void main() {
     vec3 posses[3];
     for (int i = 0; i < 3; i++) {
         posses[i] = gl_in[i].gl_Position.xyz;
-        posses[i].y += 0.1f * sin(0.5f * inData[i].worldPosition.x + 0.5f * inData[i].worldPosition.z + 1 * Time);
-    }
-
-    vec3 normal = normalize(cross(posses[1] - posses[0], posses[2] - posses[0]));
-    normal.y *= -1;
-
-    for (int i = 0; i < 3; i++) {
-        outData.texCoord = inData[i].texCoord;
-        outData.worldPosition = inData[i].worldPosition;
-        outData.normal = vec4(normal, inData[i].normal.w);
+        posses[i].y += 0.15f * sin(0.5f * sin(inData[i].worldPosition.x) + 0.5f * inData[i].worldPosition.z + 1 * Time);
 
 //        if (inData[i].worldPosition.z - BoatPosition.z < 0) {
 //            float deltaX = inData[i].worldPosition.x - BoatPosition.x;
@@ -43,6 +34,15 @@ void main() {
 //                }
 //            }
 //        }
+    }
+
+    vec3 normal = normalize(cross(posses[1] - posses[0], posses[2] - posses[0]));
+    normal.y *= -1;
+
+    for (int i = 0; i < 3; i++) {
+        outData.texCoord = inData[i].texCoord;
+        outData.worldPosition = inData[i].worldPosition;
+        outData.normal = vec4(normal, inData[i].normal.w);
 
         gl_Position = vec4(posses[i], gl_in[i].gl_Position.w);
         EmitVertex();

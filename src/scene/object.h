@@ -55,10 +55,26 @@ public:
     glm::vec3 scale{1, 1, 1};
     glm::mat4 modelMatrix{1};
 
+    float interpDuration = 0;
+    float interpTime = 0;
+    int interpBehavior = 0;
+
 protected:
     /*!
      * Generate modelMatrix from position, rotation and scale
      */
     void generateModelMatrix();
+
+    void translateTo(glm::vec3 pos);
+    void translateBy(glm::vec3 pos);
+
+    void rotateTo(glm::vec3 rot);
+    void rotateBy(glm::vec3 rot);
+
+    glm::mat4 interpStart;
+    glm::mat4 interpEnd;
+
+    void initInterpolation(glm::mat4 start, glm::mat4 end, float duration, int behavior);
+    glm::mat4 interpolate(float dt);
 };
 

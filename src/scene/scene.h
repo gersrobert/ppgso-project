@@ -7,6 +7,7 @@
 
 #include "object.h"
 #include "camera.h"
+#include "executable.h"
 
 /*
  * Scene is an object that will aggregate all scene related data
@@ -26,11 +27,15 @@ public:
      */
     virtual void render() = 0;
 
+    glm::vec3 bgColor = {0, 0, 0};
+
     // All objects to be rendered in scene
     std::list<std::unique_ptr<Object>> objects;
 
     glm::mat4 guiProjection;
     std::list<std::unique_ptr<Object>> guiObjects;
+
+    std::list<std::unique_ptr<Executable>> executables;
 
     // Keyboard state
     std::map<int, int> keyboard;

@@ -21,5 +21,7 @@ void main() {
 
   if (FragmentColor.r < 0.75 &&FragmentColor.g < 0.75 &&FragmentColor.b < 0.75) {
     FragmentColor.a = 0;
+  } else {
+    FragmentColor = color;
   }
 }

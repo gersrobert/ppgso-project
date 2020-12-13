@@ -8,6 +8,7 @@
 #include "island.h"
 #include "src/scene/scene.h"
 #include "tree.h"
+#include "lighthouse.h"
 
 std::unique_ptr<ppgso::Mesh> Island::mesh;
 std::unique_ptr<ppgso::Texture> Island::texture;
@@ -38,14 +39,16 @@ Island::Island(Scene &scene, Chunk &chunk) : chunk(chunk) {
     scale *= 100;
     rotation.z = glm::linearRand(0.0f, ppgso::PI * 2);
 
-    for (size_t i = 0; i < glm::linearRand(0, 3); ++i) {
-        glm::vec3 pos = position + glm::vec3{
-            glm::linearRand(-5.0f + float(i) * 5.0f, -5.0f + float(i+1) * 5.0f),
-            2,
-            glm::linearRand(-5.0f + float(i) * 5.0f, -5.0f + float(i+1) * 5.0f),
-        };
-
-        auto tree = std::make_unique<Tree>(scene, chunk, pos);
+    auto treeCount = static_cast<uint32_t>(glm::linearRand(0, 4));
+    if (treeCount == 0) {
+        treeCount = 0;
+    } else if (treeCount == 4) {
+        treeCount = 2;
+    } else {
+        treeCount = 1;
+    }
+    for (size_t i = 0; i < treeCount; ++i) {
+        auto tree = std::make_unique<Tree>(scene, chunk, *this);
         scene.objects.push_back(move(tree));
     }
 }

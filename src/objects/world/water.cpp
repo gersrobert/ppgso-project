@@ -77,13 +77,7 @@ Water::Water(Scene &scene, Chunk &chunk) : VertexObject(), chunk(chunk) {
 }
 
 bool Water::update(Scene &scene, float dt) {
-    auto gameScene = dynamic_cast<GameScene*>(&scene);
-
     time += dt;
-
-    textureOffset.x += gameScene->windDirection.x * 0.0125f * dt;
-    textureOffset.y += gameScene->windDirection.y * 0.0125f * dt;
-
     generateModelMatrix();
     return chunk.isActive;
 }
@@ -104,7 +98,6 @@ void Water::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("Texture", *texture);
     shader->setUniform("Transparency", 0.75f);
-    shader->setUniform("TextureOffset", textureOffset);
     shader->setUniform("CameraPosition", gameScene->camera->getTotalPosition());
     shader->setUniform("viewDistance", gameScene->VISIBILITY);
     shader->setUniform("Time", time);

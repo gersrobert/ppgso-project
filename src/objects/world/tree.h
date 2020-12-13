@@ -4,6 +4,7 @@
 #include <src/scene/scene.h>
 #include <src/scene/object.h>
 #include "chunk.h"
+#include "island.h"
 
 class Tree final : public Object {
 private:
@@ -12,10 +13,11 @@ private:
     static std::unique_ptr<ppgso::Texture> texture;
 
     Chunk &chunk;
+    Island &island;
 
 public:
 
-    explicit Tree(Scene &scene, Chunk &chunk, glm::vec3 &_position);
+    explicit Tree(Scene &scene, Chunk &chunk, Island &island);
 
     bool update(Scene &scene, float dt) override;
 

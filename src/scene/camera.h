@@ -40,7 +40,7 @@ public:
     /*!
      * Update Camera viewMatrix based on up, position and back vectors
      */
-    void update(Scene &scene, float time, const glm::vec3 &targetPosition, const glm::vec3 &targetRotation);
+    void update(Scene &scene, float time);
 
     /*!
      * Get direction vector in world coordinates through camera projection plane
@@ -50,11 +50,14 @@ public:
      */
     glm::vec3 cast(double u, double v);
 
+    void moveTo(const glm::vec3 &pos, const glm::vec3 &rot);
+
     glm::vec3 getTotalPosition() const;
 
 private:
-    void moveFirstPerson(Scene &scene, float time);
     void moveThirdPerson(Scene &scene, float time);
-    void moveCinematic(Scene &scene, float time);
+
+    void initialize(Scene &scene);
+    bool initialized = false;
 };
 

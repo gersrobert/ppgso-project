@@ -22,15 +22,17 @@ private:
     static std::unique_ptr<ppgso::Texture> texture;
 
     float speed = 1.0;
-    float acceleration = 0.0;
     float rotationSpeed = 0;
     float sailSheathe = 0.5f;
-    float sailEffect = 0.0f;
 
     friend class BoatWheel;
     friend class Mainsail;
     friend class Foresail;
     friend class WindVane;
+
+    float calculateSailEffect(Scene &scene, float dt);
+    static float calculateSpeed(float currentSpeed, float sailForce);
+    void checkCollisions(Scene &scene);
 
 public:
     /*!

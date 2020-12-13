@@ -11,6 +11,8 @@
 #include <src/scene/scenes/game_scene.h>
 #include <src/scene/scene.h>
 #include <src/scene/scenes/menu_scene.h>
+#include <src/objects/world/lighthouse.h>
+#include <src/gui/gui_boat.h>
 
 const uint32_t WIDTH = 2560;
 const uint32_t HEIGHT = 1440;
@@ -29,11 +31,7 @@ private:
 
     bool animate = true;
 
-    /*!
-     * Reset and initialize the game scene
-     * Creating unique smart pointers to objects that are stored in the scene object list
-     */
-    void initGameScene() {
+    void createGameScene() {
         auto scene = std::make_shared<GameScene>();
         scenes.push_back(scene);
 
@@ -58,11 +56,14 @@ private:
             }
         }
 
+        auto lightHouse = std::make_unique<LightHouse>(*scene);
+        scene->objects.push_back(move(lightHouse));
+
         auto compass = std::make_unique<Compass>(*scene);
         scene->guiObjects.push_back(move(compass));
     }
 
-    void initMenuScene() {
+    void createMenuScene() {
         auto scene = std::make_shared<MenuScene>();
         scenes.push_back(scene);
 
@@ -71,7 +72,11 @@ private:
 
         scene->guiProjection = glm::ortho(-float(WIDTH) / float(HEIGHT), float(WIDTH) / float(HEIGHT), -1.0f, 1.0f);
 
-        auto text = std::make_unique<Text>(*scene, "Hello world!");
+        auto boat = std::make_unique<GuiBoat>(*scene);
+        scene->guiObjects.push_back(move(boat));
+
+        auto text = std::make_unique<Text>(*scene, "Press P to start", glm::vec4{.8, .8, .8, 1});
+        text->position = {-0.8f, -0.8f, 0};
         scene->guiObjects.push_back(move(text));
     }
 
@@ -99,12 +104,11 @@ private:
         glCullFace(GL_BACK);
 
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-//        fpsLimit(false);
 
         scenes.reserve(2);
-        activeScene = 1;
-        initMenuScene();
-        initGameScene();
+        activeScene = 0;
+        createMenuScene();
+        createGameScene();
     }
 
     /*!
@@ -156,7 +160,7 @@ private:
         time = (float) glfwGetTime();
 
         // Set gray background
-        glClearColor(.675f, .82f, .82f, 0);
+        glClearColor(scenes.at(activeScene)->bgColor.x, scenes.at(activeScene)->bgColor.y, scenes.at(activeScene)->bgColor.z, 0);
         // Clear depth and color buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -96,7 +96,7 @@ private:
 
 public:
 
-    explicit Text(Scene &scene, const std::string &text);
+    explicit Text(Scene &scene, const std::string &text, const glm::vec4 &color);
 
     bool update(Scene &scene, float dt) override;
 

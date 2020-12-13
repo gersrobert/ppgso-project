@@ -4,6 +4,7 @@
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
 #include <src/scene/scenes/game_scene.h>
+#include <src/objects/world/island.h>
 #include "boat_wheel.h"
 #include "mainsail.h"
 #include "foresail.h"
@@ -41,15 +42,8 @@ Boat::Boat(Scene &scene) {
     rotation.x = -0.015f;
 }
 
-bool Boat::update(Scene &scene, float dt) {
-    // Hit detection
-    for (auto &obj : scene.objects) {
-        // Ignore self in scene
-        if (obj.get() == this)
-            continue;
-    }
 
-    // Keyboard controls
+float Boat::calculateSailEffect(Scene &scene, float dt) {
     if (scene.keyboard[GLFW_KEY_W]) {
         sailSheathe += dt * 0.33f;
     }
@@ -63,23 +57,47 @@ bool Boat::update(Scene &scene, float dt) {
         sailSheathe = 0;
     }
 
-    sailEffect = std::abs(std::cos(rotation.z)) - sailSheathe;
+    float sailEffect = std::abs(std::cos(rotation.z)) - sailSheathe;
     if (sailEffect < 0) {
         sailEffect = -1;
     } else {
         sailEffect *= 1 + (20.0f * ppgso::PI/180.0f);
         sailEffect -= 20.0f * ppgso::PI/180.0f;
     }
+    return sailEffect;
+}
 
-    acceleration = std::cos(sailEffect * ppgso::PI/2) - (0.9f * speed + 0.1f);
-    speed += 0.001f * acceleration;
+float Boat::calculateSpeed(float currentSpeed, float sailForce) {
+    float stoppingForce = (0.9f * currentSpeed + 0.1f);
+
+    float acceleration = std::cos(sailForce * ppgso::PI/2) - stoppingForce;
+
+    return currentSpeed + 0.001f * acceleration;
+}
+
+void Boat::checkCollisions(Scene &scene) {
+    for (auto &obj : scene.objects) {
+        if (obj.get() == this) continue;
+        auto island = dynamic_cast<Island*>(obj.get());
+        if (!island) continue;
+
+        if (glm::distance(this->position, island->position) < (this->scale.x + island->scale.x) * 0.15f) {
+            std::cout << "collision" << std::endl;
+        }
+    }
+}
+
+bool Boat::update(Scene &scene, float dt) {
+    checkCollisions(scene);
+
+    float sailEffect = calculateSailEffect(scene, dt);
+    speed = calculateSpeed(speed, sailEffect);
 
     static int xt = 0;
     xt++;
     if (xt % 144 == 0) {
-        std::cout << speed << ", " << acceleration << ", " << sailEffect << std::endl;
+        std::cout << speed << ", " << sailEffect << std::endl;
     }
-
 
     if (rotationSpeed > 0) {
         rotationSpeed -=  0.001f * dt;
@@ -109,6 +127,7 @@ bool Boat::update(Scene &scene, float dt) {
     rotation.y = 0.15f * std::cos(rotation.z);
 
     dynamic_cast<GameScene*>(&scene)->setTargetPosition(position, rotation);
+
     generateModelMatrix();
     return isActive;
 }

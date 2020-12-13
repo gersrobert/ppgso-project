@@ -7,7 +7,7 @@
 std::unique_ptr<ppgso::Shader> Text::shader;
 std::unique_ptr<ppgso::Texture> Text::texture;
 
-Text::Text(Scene &scene, const std::string &text) : VertexObject(), text(text) {
+Text::Text(Scene &scene, const std::string &text, const glm::vec4 &color) : VertexObject(), text(text) {
     if (!shader) {
         ppgso::ShaderConfig shaderConfig;
         shaderConfig.vs = text_vert_glsl;
@@ -31,6 +31,11 @@ Text::Text(Scene &scene, const std::string &text) : VertexObject(), text(text) {
         texCoords.emplace_back(c.u - 0.002, c.v + 0.098);
         texCoords.emplace_back(c.u + 0.098, c.v + 0.098);
 
+        colors.push_back(color);
+        colors.push_back(color);
+        colors.push_back(color);
+        colors.push_back(color);
+
         faces.push_back({(GLuint) (i * 4 + 0), (GLuint) (i * 4 + 2), (GLuint) (i * 4 + 3)});
         faces.push_back({(GLuint) (i * 4 + 3), (GLuint) (i * 4 + 1), (GLuint) (i * 4 + 0)});
     }
@@ -40,15 +45,13 @@ Text::Text(Scene &scene, const std::string &text) : VertexObject(), text(text) {
     setTextureBuffer(shader);
     setIndexBuffer();
 
-//    glGenBuffers(1, &cbo);
-//    glBindBuffer(GL_ARRAY_BUFFER, cbo);
-//    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_STATIC_DRAW);
+    glGenBuffers(1, &cbo);
+    glBindBuffer(GL_ARRAY_BUFFER, cbo);
+    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_STATIC_DRAW);
 
-    // Set vertex program inputs
-//    auto position_attrib = shader->getAttribLocation("Color");
-//    glEnableVertexAttribArray(position_attrib);
-//    glVertexAttribPointer(position_attrib, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-
+    auto position_attrib = shader->getAttribLocation("Color");
+    glEnableVertexAttribArray(position_attrib);
+    glVertexAttribPointer(position_attrib, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     scale *= 0.1f;
 }
