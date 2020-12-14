@@ -1,11 +1,10 @@
-#ifndef PPGSO_COMPASS_H
-#define PPGSO_COMPASS_H
+#ifndef PPGSO_COMPASS_MARKER_H
+#define PPGSO_COMPASS_MARKER_H
 
 #include <src/scene/vertex_object.h>
 #include <src/scene/scene.h>
 
-
-class Compass final : public VertexObject {
+class CompassMarker final : public VertexObject {
 private:
     static std::unique_ptr<ppgso::Shader> shader;
 
@@ -14,12 +13,11 @@ private:
 
 public:
 
-    explicit Compass(Scene &scene);
-    ~Compass() override;
+    explicit CompassMarker(Scene &scene);
 
     bool update(Scene &scene, float dt) override;
 
     void render(Scene &scene) override;
 };
 
-#endif //PPGSO_COMPASS_H
+#endif //PPGSO_COMPASS_MARKER_H

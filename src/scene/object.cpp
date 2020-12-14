@@ -18,7 +18,6 @@ void Object::generateModelMatrix() {
 
 glm::mat4 Object::interpolate(float dt) {
     interpTime += dt;
-    std::cout << interpTime << std::endl;
 
     if (interpTime >= interpDuration) {
         if (interpBehavior == 0) {

@@ -9,6 +9,8 @@
 #include "camera.h"
 #include "executable.h"
 
+class SceneWindow;
+
 /*
  * Scene is an object that will aggregate all scene related data
  * Objects are stored in a list of objects
@@ -16,6 +18,9 @@
  */
 class Scene {
 public:
+
+    Scene(SceneWindow &window) : window(window) {}
+
     /*!
      * Update all objects in the scene
      * @param time
@@ -26,6 +31,8 @@ public:
      * Render all objects in the scene
      */
     virtual void render() = 0;
+
+    SceneWindow &window;
 
     glm::vec3 bgColor = {0, 0, 0};
 

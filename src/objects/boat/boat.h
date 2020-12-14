@@ -15,25 +15,6 @@ class WindVane;
  * On Update checks collisions with Asteroid objects in the scene
  */
 class Boat final : public Object {
-private:
-    // Static resources (Shared between instances)
-    static std::unique_ptr<ppgso::Shader> shader;
-    static std::unique_ptr<ppgso::Mesh> mesh;
-    static std::unique_ptr<ppgso::Texture> texture;
-
-    float speed = 1.0;
-    float rotationSpeed = 0;
-    float sailSheathe = 0.5f;
-
-    friend class BoatWheel;
-    friend class Mainsail;
-    friend class Foresail;
-    friend class WindVane;
-
-    float calculateSailEffect(Scene &scene, float dt);
-    static float calculateSpeed(float currentSpeed, float sailForce);
-    void checkCollisions(Scene &scene);
-
 public:
     /*!
      * Create a new player
@@ -54,5 +35,32 @@ public:
      */
     void render(Scene &scene) override;
 
+    enum Mode {
+        GAME, COLLISION, END
+    };
+
+private:
+    // Static resources (Shared between instances)
+    static std::unique_ptr<ppgso::Shader> shader;
+    static std::unique_ptr<ppgso::Mesh> mesh;
+    static std::unique_ptr<ppgso::Texture> texture;
+
+    float speed = 1.0;
+    float rotationSpeed = 0;
+    float sailSheathe = 0.5f;
+
+    friend class BoatWheel;
+    friend class Mainsail;
+    friend class Foresail;
+    friend class WindVane;
+
+    float calculateSailEffect(Scene &scene, float dt);
+    static float calculateSpeed(float currentSpeed, float sailForce);
+    void checkCollisions(Scene &scene, float dt);
+
+    Mode mode = GAME;
+
+    bool updateGame(Scene &scene, float dt);
+    bool updateCollision(Scene &scene, float dt);
 };
 

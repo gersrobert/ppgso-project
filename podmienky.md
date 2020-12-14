@@ -12,14 +12,14 @@
     - ~~Zmena scény a viacero virtuálnych oblastí~~ (2p)
     - ~~Aspoň 2 rôzne scény~~
     - ~~Scéna bude mať logické spodok a pozadie (obloha, strop, steny…)~~ (1p)
-    - Prezentované demo musí mať logický začiatok a koniec (1p)
+    - ~~Prezentované demo musí mať logický začiatok a koniec~~ (1p)
 - Objekty a interakcia [6p]
     - ~~Dynamická scéna s objektami, ktoré sú vytvorené a zaniknú v čase~~(1p)
-    - ~~Aspoň 2 rôzne typy objektov~~
+        - ~~Aspoň 2 rôzne typy objektov~~
     - ~~Procedurálne generovaná scéna~~ (2p)
-    - ~~Obmedzenia a lokácia objektov definivaná deterministickým algoritmom~~
-    - Efektívna kolízia medzi objektami(3p)
-    - Dynamická odozva na kolíziu
+        - ~~Obmedzenia a lokácia objektov definivaná deterministickým algoritmom~~
+    - ~~Efektívna kolízia medzi objektami(3p)~~
+        - ~~Dynamická odozva na kolíziu~~
 - Transformácie a animácie [9p]
     - ~~Procedurálna animácia~~ (2p)
         - ~~Uzavretá metóda s parametrami~~

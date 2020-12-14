@@ -3,6 +3,7 @@
 #include <src/scene/scenes/game_scene.h>
 #include "compass.h"
 #include "compass_hand.h"
+#include "compass_marker.h"
 
 std::unique_ptr<ppgso::Shader> Compass::shader;
 
@@ -16,6 +17,8 @@ Compass::Compass(Scene &scene) : VertexObject() {
 
     auto hand = std::make_unique<CompassHand>(scene);
     scene.guiObjects.push_back(move(hand));
+    auto marker = std::make_unique<CompassMarker>(scene);
+    scene.guiObjects.push_back(move(marker));
 
     vertices = {
             {-0.1, 1, 0},

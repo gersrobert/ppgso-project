@@ -18,7 +18,7 @@ TreeBird::TreeBird(Scene &scene, Chunk &chunk, Tree &tree) : chunk(chunk), tree(
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("bird.obj");
 
     position.y = 0.175f;
-    scale *= 0.05f;
+    scale *= 0.04f;
     rotation.y = ppgso::PI;
 }
 

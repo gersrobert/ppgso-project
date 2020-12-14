@@ -78,7 +78,6 @@ void CompassHand::render(Scene &scene) {
     shader->setUniform("ModelMatrix", modelMatrix);
     shader->setUniform("OverallColor", {0, 0, 0, 0});
 
-
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, (GLsizei) faces.size() * 3, GL_UNSIGNED_INT, nullptr);
 }

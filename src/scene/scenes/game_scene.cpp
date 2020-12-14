@@ -1,8 +1,14 @@
 #include "game_scene.h"
+#include "src/scene_window.h"
 
 void GameScene::update(float time) {
     camera->update(*this, time);
     bgColor = {0, 0.1, 0.21875};
+
+    if (keyboard[GLFW_KEY_P] == GLFW_PRESS) {
+        window.pauseGame();
+        keyboard[GLFW_KEY_P] = GLFW_RELEASE;
+    }
 
     Scene::update(time);
 }

@@ -3,7 +3,7 @@
 #include "water.h"
 
 Chunk::Chunk(GameScene &scene, glm::vec2 position) : size(scene.VISIBILITY), position(position) {
-    for (size_t i = 0; i < 13; ++i) {
+    for (size_t i = 0; i < 16; ++i) {
         auto island = std::make_unique<Island>(scene, *this);
         scene.objects.push_back(move(island));
     }

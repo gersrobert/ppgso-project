@@ -24,16 +24,6 @@ void main() {
     for (int i = 0; i < 3; i++) {
         posses[i] = gl_in[i].gl_Position.xyz;
         posses[i].y += 0.15f * sin(0.5f * sin(inData[i].worldPosition.x) + 0.5f * inData[i].worldPosition.z + 1 * Time);
-
-//        if (inData[i].worldPosition.z - BoatPosition.z < 0) {
-//            float deltaX = inData[i].worldPosition.x - BoatPosition.x;
-//            if (deltaX < 3f && deltaX > -3f) {
-//                float y = cos(1.5f * deltaX - 0.5f);
-//                if (y > 0) {
-//                    posses[i].y -= 0.2f * y;
-//                }
-//            }
-//        }
     }
 
     vec3 normal = normalize(cross(posses[1] - posses[0], posses[2] - posses[0]));

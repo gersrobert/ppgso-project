@@ -5,10 +5,13 @@
 #include <shaders/diffuse_frag_glsl.h>
 #include <src/scene/scenes/game_scene.h>
 #include <src/objects/world/island.h>
+#include <src/util/animator.h>
+#include <src/gui/screen_overlay.h>
 #include "boat_wheel.h"
 #include "mainsail.h"
 #include "foresail.h"
 #include "wind_vane.h"
+#include "../world/lighthouse.h"
 
 // shared resources
 std::unique_ptr<ppgso::Mesh> Boat::mesh;
@@ -75,21 +78,57 @@ float Boat::calculateSpeed(float currentSpeed, float sailForce) {
     return currentSpeed + 0.001f * acceleration;
 }
 
-void Boat::checkCollisions(Scene &scene) {
+void Boat::checkCollisions(Scene &scene, float dt) {
     for (auto &obj : scene.objects) {
         if (obj.get() == this) continue;
-        auto island = dynamic_cast<Island*>(obj.get());
-        if (!island) continue;
 
-        if (glm::distance(this->position, island->position) < (this->scale.x + island->scale.x) * 0.15f) {
-            std::cout << "collision" << std::endl;
+        auto island = dynamic_cast<Island*>(obj.get());
+        if (island) {
+            static bool collisionStarted = false;
+            if (glm::distance(this->position, island->position) < (this->scale.x + island->scale.x) * 0.15f) {
+                mode = COLLISION;
+
+                if (!collisionStarted) {
+                    collisionStarted = true;
+
+                    auto overlay = std::make_unique<ScreenOverlay>(scene, mode);
+                    scene.guiObjects.push_back(move(overlay));
+                }
+            }
+        }
+
+        auto lighthouse = dynamic_cast<LightHouse*>(obj.get());
+        if (lighthouse) {
+            static bool collisionStarted = false;
+            if (glm::distance(this->position, lighthouse->position) < (this->scale.x + lighthouse->scale.x) * 5.0f) {
+                mode = END;
+
+                if (!collisionStarted) {
+                    collisionStarted = true;
+
+                    auto overlay = std::make_unique<ScreenOverlay>(scene, mode);
+                    scene.guiObjects.push_back(move(overlay));
+                }
+            }
         }
     }
 }
 
 bool Boat::update(Scene &scene, float dt) {
-    checkCollisions(scene);
+    checkCollisions(scene, dt);
 
+    switch (mode) {
+        case GAME:
+        case END:
+            updateGame(scene, dt);
+            break;
+        case COLLISION:
+            updateCollision(scene, dt);
+            break;
+    }
+}
+
+bool Boat::updateGame(Scene &scene, float dt) {
     float sailEffect = calculateSailEffect(scene, dt);
     speed = calculateSpeed(speed, sailEffect);
 
@@ -127,6 +166,14 @@ bool Boat::update(Scene &scene, float dt) {
     rotation.y = 0.15f * std::cos(rotation.z);
 
     dynamic_cast<GameScene*>(&scene)->setTargetPosition(position, rotation);
+
+    generateModelMatrix();
+    return isActive;
+}
+
+bool Boat::updateCollision(Scene &scene, float dt) {
+    auto animator = std::make_unique<Animator>(position, position + glm::vec3{0, -3, 0}, 6);
+    scene.executables.push_back(move(animator));
 
     generateModelMatrix();
     return isActive;

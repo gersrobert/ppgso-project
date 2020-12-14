@@ -10,10 +10,11 @@ public:
     std::unique_ptr<Camera> camera;
     glm::vec3 targetPosition;
     glm::vec3 targetRotation;
-    glm::vec2 windDirection = {1, -2};
     glm::vec3 lightDirection{-1.0f, 1.0f, -1.0f};
 
-    GameScene(): Scene() {}
+    glm::vec2 lightHousePosition;
+
+    explicit GameScene(SceneWindow &window): Scene(window) {}
 
     void update(float time) override;
 

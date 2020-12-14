@@ -15,6 +15,22 @@ LightHouse::LightHouse(Scene &scene) {
     }
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("lighthouse.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("lighthouse.obj");
+
+    scale *= 2.0f;
+
+    position.x = glm::linearRand(-300.0f, 300.0f);
+    if (position.x > 0) {
+        position.x += 200;
+    } else {
+        position.x -= 200;
+    }
+
+    position.z = glm::linearRand(-300.0f, 300.0f);
+    if (position.z > 0) {
+        position.z += 200;
+    } else {
+        position.z -= 200;
+    }
 }
 
 bool LightHouse::update(Scene &scene, float dt) {
@@ -25,7 +41,7 @@ bool LightHouse::update(Scene &scene, float dt) {
 void LightHouse::render(Scene &scene) {
     shader->use();
 
-    auto gameScene = dynamic_cast<GameScene*>(&scene);
+    auto gameScene = dynamic_cast<GameScene *>(&scene);
 
     // Set up light
     shader->setUniform("LightDirection", gameScene->lightDirection);
