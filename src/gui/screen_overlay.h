@@ -12,6 +12,8 @@ private:
 
     glm::vec4 color = {0, 0.1, 0.21875, -1.0};
 
+    Boat::Mode mode;
+
 public:
 
     explicit ScreenOverlay(Scene &scene, Boat::Mode mode);

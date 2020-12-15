@@ -71,7 +71,8 @@ public:
 
     void startGame();
     void pauseGame();
-    void endGame();
+    void endGameDead();
+    void endGameFinished();
 };
 
 #endif //PPGSO_SCENE_WINDOW_H

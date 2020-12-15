@@ -7,7 +7,7 @@ class MenuScene : public Scene {
 public:
 
     enum Mode {
-        START, PAUSE, END
+        START, PAUSE, DEAD, FINISHED
     };
 
     explicit MenuScene(SceneWindow &window, Mode mode): Scene(window), mode(mode) {}

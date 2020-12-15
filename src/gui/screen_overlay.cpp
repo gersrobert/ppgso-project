@@ -1,11 +1,11 @@
 #include <shaders/color_vert_glsl.h>
 #include <shaders/color_frag_glsl.h>
 #include "screen_overlay.h"
-#include "src/scene_window.h"
+#include "src/scene/scene_window.h"
 
 std::unique_ptr<ppgso::Shader> ScreenOverlay::shader;
 
-ScreenOverlay::ScreenOverlay(Scene &scene, Boat::Mode mode) {
+ScreenOverlay::ScreenOverlay(Scene &scene, Boat::Mode mode) : mode(mode) {
     if (!shader) {
         ppgso::ShaderConfig shaderConfig;
         shaderConfig.vs = color_vert_glsl;
@@ -33,7 +33,11 @@ ScreenOverlay::ScreenOverlay(Scene &scene, Boat::Mode mode) {
 bool ScreenOverlay::update(Scene &scene, float dt) {
     color.a += dt;
     if (color.a >= 1) {
-        scene.window.endGame();
+        if (mode == Boat::COLLISION) {
+            scene.window.endGameDead();
+        } else if (mode == Boat::END) {
+            scene.window.endGameFinished();
+        }
     }
 
     generateModelMatrix();

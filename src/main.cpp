@@ -3,7 +3,7 @@
 
 #include <ppgso/ppgso.h>
 #include <src/objects/world/water.h>
-#include "scene_window.h"
+#include "src/scene/scene_window.h"
 
 void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     std::cout << "[OpenGL Error](" << type << ") " << message << std::endl;

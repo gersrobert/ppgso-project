@@ -1,5 +1,5 @@
 #include "game_scene.h"
-#include "src/scene_window.h"
+#include "src/scene/scene_window.h"
 
 void GameScene::update(float time) {
     camera->update(*this, time);

@@ -55,20 +55,32 @@ void SceneWindow::createMenuScene(MenuScene::Mode mode) {
         case MenuScene::PAUSE: {
 
             auto topText = std::make_unique<Text>(*scene, "PAUSED", glm::vec4{.8, .8, .8, 1});
-            topText->position = {-0.4f, 0.4f, 0};
+            topText->position = {-0.3f, 0.4f, 0};
             scene->guiObjects.push_back(move(topText));
 
             auto bottomText = std::make_unique<Text>(*scene, "Press P to resume", glm::vec4{.8, .8, .8, 1});
-            bottomText->position = {-0.8f, -0.8f, 0};
+            bottomText->position = {-0.7f, -0.8f, 0};
             scene->guiObjects.push_back(move(bottomText));
 
             break;
         }
-        case MenuScene::END: {
+        case MenuScene::DEAD: {
 
             auto topText = std::make_unique<Text>(*scene, "WASTED", glm::vec4{.8, .8, .8, 1});
-            topText->position = {-0.4f, 0.4f, 0};
+            topText->position = {-0.3f, 0.4f, 0};
             scene->guiObjects.push_back(move(topText));
+
+            break;
+        }
+        case MenuScene::FINISHED: {
+
+            auto topText = std::make_unique<Text>(*scene, "SUCCESS!", glm::vec4{.8, .8, .8, 1});
+            topText->position = {-0.3f, 0.4f, 0};
+            scene->guiObjects.push_back(move(topText));
+
+            auto bottomText = std::make_unique<Text>(*scene, "You found the lighthouse!", glm::vec4{.8, .8, .8, 1});
+            bottomText->position = {-0.85f, -0.8f, 0};
+            scene->guiObjects.push_back(move(bottomText));
 
             break;
         }
@@ -149,7 +161,12 @@ void SceneWindow::pauseGame() {
     }
 }
 
-void SceneWindow::endGame() {
-    createMenuScene(MenuScene::END);
+void SceneWindow::endGameDead() {
+    createMenuScene(MenuScene::DEAD);
+    activeScene = 1;
+}
+
+void SceneWindow::endGameFinished() {
+    createMenuScene(MenuScene::FINISHED);
     activeScene = 1;
 }

@@ -1,5 +1,5 @@
 #include "menu_scene.h"
-#include "src/scene_window.h"
+#include "src/scene/scene_window.h"
 
 void MenuScene::update(float time) {
     Scene::update(time);
@@ -17,7 +17,7 @@ void MenuScene::update(float time) {
                 keyboard[GLFW_KEY_P] = GLFW_RELEASE;
             }
             break;
-        case END:
+        default:
             break;
     }
 }

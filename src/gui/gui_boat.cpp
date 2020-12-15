@@ -25,18 +25,16 @@ GuiBoat::GuiBoat(Scene &scene) {
     position.y = -0.5f;
 
     auto startMatrix = glm::translate(glm::mat4(1), position)
-                       * glm::rotate(glm::mat4(1), 0.0f, {0, 1, 0})
-                       * glm::scale(glm::mat4(1), scale);
+                       * glm::rotate(glm::mat4(1), 0.0f, {0, 1, 0});
 
     auto endMatrix = glm::translate(glm::mat4(1), position)
-                       * glm::rotate(glm::mat4(1), 180.0f * ppgso::PI/180.0f, {0, 1, 0})
-                       * glm::scale(glm::mat4(1), scale);
+                       * glm::rotate(glm::mat4(1), 180.0f * ppgso::PI/180.0f, {0, 1, 0});
 
     initInterpolation(startMatrix, endMatrix, 10.0f, 0);
 }
 
 bool GuiBoat::update(Scene &scene, float dt) {
-    modelMatrix = interpolate(dt);
+    modelMatrix = interpolate(dt) * glm::scale(glm::mat4(1), scale);
     return isActive;
 }
 
