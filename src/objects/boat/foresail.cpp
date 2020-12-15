@@ -44,6 +44,7 @@ void Foresail::render(Scene &scene) {
 
     // Set up light
     shader->setUniform("LightDirection", gameScene->lightDirection);
+    shader->setUniform("lightColor", gameScene->lightColor);
 
     // use camera
     shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);

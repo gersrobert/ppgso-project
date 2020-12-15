@@ -41,6 +41,7 @@ void Skydome::render(Scene &scene) {
 
     // Set up light
     shader->setUniform("LightDirection", {0, 0, 0});
+    shader->setUniform("lightColor", gameScene->lightColor);
 
     // use camera
     shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);

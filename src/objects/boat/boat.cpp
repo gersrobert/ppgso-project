@@ -45,7 +45,6 @@ Boat::Boat(Scene &scene) {
     rotation.x = -0.015f;
 }
 
-
 float Boat::calculateSailEffect(Scene &scene, float dt) {
     if (scene.keyboard[GLFW_KEY_W]) {
         sailSheathe += dt * 0.33f;
@@ -186,6 +185,7 @@ void Boat::render(Scene &scene) {
 
     // Set up light
     shader->setUniform("LightDirection", gameScene->lightDirection);
+    shader->setUniform("lightColor", gameScene->lightColor);
 
     // use camera
     shader->setUniform("ProjectionMatrix", gameScene->camera->projectionMatrix);

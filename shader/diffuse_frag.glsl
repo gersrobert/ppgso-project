@@ -4,6 +4,7 @@ uniform sampler2D Texture;
 
 // Direction of light
 uniform vec3 LightDirection;
+uniform vec3 lightColor = {1, 1, 1};
 
 // (optional) Transparency
 uniform float Transparency;
@@ -46,7 +47,7 @@ void main() {
     specularFactor = 0;
   }
 
-  FragmentColor = texture(Texture, vec2(inData.texCoord.x, 1.0 - inData.texCoord.y) + TextureOffset) * diffuse * (1 + specularFactor);
+  FragmentColor = texture(Texture, vec2(inData.texCoord.x, 1.0 - inData.texCoord.y) + TextureOffset) * diffuse * (1 + specularFactor) * vec4(lightColor, 1);
   FragmentColor.a = Transparency;
 
   if (viewDistance != 0) {

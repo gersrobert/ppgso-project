@@ -9,6 +9,18 @@ void GameScene::update(float time) {
         window.pauseGame();
         keyboard[GLFW_KEY_P] = GLFW_RELEASE;
     }
+    if (keyboard[GLFW_KEY_L] == GLFW_PRESS) {
+        keyboard[GLFW_KEY_L] = GLFW_RELEASE;
+
+        const glm::vec3 lightDay{1, 1, 1};
+        const glm::vec3 lightEvening{0.9, 0.7, 0.7};
+
+        if (lightColor == lightDay) {
+            lightColor = lightEvening;
+        } else {
+            lightColor = lightDay;
+        }
+    }
 
     Scene::update(time);
 }

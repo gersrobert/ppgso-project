@@ -8,9 +8,12 @@ public:
     const float VISIBILITY = 400.0f;
 
     std::unique_ptr<Camera> camera;
+
+    glm::vec3 lightDirection{-1.0f, 1.0f, -1.0f};
+    glm::vec3 lightColor{1.0f, 1.0f, 1.0f};
+
     glm::vec3 targetPosition;
     glm::vec3 targetRotation;
-    glm::vec3 lightDirection{-1.0f, 1.0f, -1.0f};
 
     glm::vec2 lightHousePosition;
 
