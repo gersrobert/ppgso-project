@@ -30,7 +30,7 @@ Tree::Tree(Scene &scene, Chunk &chunk, Island &island) : chunk(chunk), island(is
     rotation.x = glm::linearRand(-0.1f, 0.1f);
     scale *= glm::linearRand(0.5, 1.0);
 
-    if (glm::linearRand(1, 1)) {
+    if (glm::linearRand(0, 1)) {
         auto bird = std::make_unique<TreeBird>(scene, chunk, *this);
         scene.objects.push_back(move(bird));
     }

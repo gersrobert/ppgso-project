@@ -1,5 +1,6 @@
 #include <shaders/diffuse_vert_glsl.h>
 #include <shaders/diffuse_frag_glsl.h>
+#include <src/objects/static_object.h>
 #include "lighthouse.h"
 
 std::unique_ptr<ppgso::Shader> LightHouse::shader;
@@ -16,7 +17,7 @@ LightHouse::LightHouse(Scene &scene) {
     if (!texture) texture = std::make_unique<ppgso::Texture>(ppgso::image::loadBMP("lighthouse.bmp"));
     if (!mesh) mesh = std::make_unique<ppgso::Mesh>("lighthouse.obj");
 
-    scale *= 2.0f;
+    scale *= 3.0f;
 
     position.x = glm::linearRand(-300.0f, 300.0f);
     if (position.x > 0) {
@@ -31,6 +32,12 @@ LightHouse::LightHouse(Scene &scene) {
     } else {
         position.z -= 200;
     }
+
+    auto island = std::make_unique<StaticObject>(scene, "island_1.obj", "island_1.bmp");
+    island->scale *= 100;
+    island->position = position;
+    island->position.y = -1;
+    scene.objects.push_back(move(island));
 }
 
 bool LightHouse::update(Scene &scene, float dt) {

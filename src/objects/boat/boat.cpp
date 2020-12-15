@@ -99,7 +99,7 @@ void Boat::checkCollisions(Scene &scene, float dt) {
         auto lighthouse = dynamic_cast<LightHouse*>(obj.get());
         if (lighthouse) {
             static bool collisionStarted = false;
-            if (glm::distance(this->position, lighthouse->position) < (this->scale.x + lighthouse->scale.x) * 5.0f) {
+            if (glm::distance(this->position, lighthouse->position) < (this->scale.x + lighthouse->scale.x) * 7.0f) {
                 mode = END;
 
                 if (!collisionStarted) {

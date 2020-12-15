@@ -103,6 +103,7 @@ void Water::render(Scene &scene) {
     shader->setUniform("viewDistance", gameScene->VISIBILITY);
     shader->setUniform("Time", time);
     shader->setUniform("BoatPosition", gameScene->targetPosition);
+    shader->setUniform("BoatRotation", gameScene->targetRotation);
     shader->setUniform("specularFocus", 4.0f);
     shader->setUniform("specularIntensity", 0.8f);
     shader->setUniform("ambientIntensity", 0.9f);

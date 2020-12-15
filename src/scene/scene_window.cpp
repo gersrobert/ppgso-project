@@ -17,16 +17,16 @@ void SceneWindow::createGameScene() {
     auto player = std::make_unique<Boat>(*scene);
     scene->objects.push_back(move(player));
 
+    auto lightHouse = std::make_unique<LightHouse>(*scene);
+    scene->lightHousePosition = {lightHouse->position.x , lightHouse->position.z};
+    scene->objects.push_back(move(lightHouse));
+
     for (int32_t i = -1; i <= 1; ++i) {
         for (int32_t j = -1; j <= 1; ++j) {
             auto chunk = std::make_unique<Chunk>(*scene, glm::vec2{i, j});
             scene->objects.push_back(move(chunk));
         }
     }
-
-    auto lightHouse = std::make_unique<LightHouse>(*scene);
-    scene->lightHousePosition = {lightHouse->position.x , lightHouse->position.z};
-    scene->objects.push_back(move(lightHouse));
 
     auto compass = std::make_unique<Compass>(*scene);
     scene->guiObjects.push_back(move(compass));
@@ -75,7 +75,7 @@ void SceneWindow::createMenuScene(MenuScene::Mode mode) {
         case MenuScene::FINISHED: {
 
             auto topText = std::make_unique<Text>(*scene, "SUCCESS!", glm::vec4{.8, .8, .8, 1});
-            topText->position = {-0.3f, 0.4f, 0};
+            topText->position = {-0.35f, 0.4f, 0};
             scene->guiObjects.push_back(move(topText));
 
             auto bottomText = std::make_unique<Text>(*scene, "You found the lighthouse!", glm::vec4{.8, .8, .8, 1});

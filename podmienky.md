@@ -33,7 +33,7 @@
     - ~~Animácia na základe dát uložených v kľúčových snímkoch a interpolácie~~ (3p)
         - ~~Kľúčový snímok reprezentujúci dátovú štruktúru uchovávajúcu transformácie~~
 - Osvetlenie za pomoci viacerých svetelných zdrojov [7p]
-    - Správne kombinovať scénu s difúznymi materiálmi a viacerými zdrojov svetla (2p)
+    - ~~Správne kombinovať scénu s difúznymi materiálmi~~ a viacerými zdrojov svetla (2p)
     - ~~Menitelná farba osvetlenia~~ (1b)
     - ~~Správny Phongov osvetlovaći model s viacerými zdrojmi svetla~~ (2p)
         - Správne tlmenie svetla na základe hĺbky

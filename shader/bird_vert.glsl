@@ -23,7 +23,7 @@ void main() {
 
   vec3 pos = Position;
   if (pos.x > 0.1f || pos.x < -0.1f) {
-    float offset = sin(Time * 3) * pos.y * (abs(pos.x) - 0.11f) * 2;
+    float offset = sin(Time * 4) * pos.y * (abs(pos.x) - 0.11f) * 2;
     if (offset < 0) {
       offset *= 2.5f;
     }
