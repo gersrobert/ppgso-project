@@ -31,6 +31,7 @@ ppgso::Window::Window(std::string title, int width, int height) : title{title}, 
 #endif
 
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
     window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (!window)
         throw std::runtime_error("Failed to initialize GLFW Window!");

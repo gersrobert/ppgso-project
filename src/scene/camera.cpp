@@ -10,25 +10,24 @@ Camera::Camera(float fov, float ratio, float near, float far) {
 }
 
 void Camera::moveThirdPerson(Scene &scene, float time) {
-//    distance = 10;
     positionOffset = {0, 3, 0};
 
     static float camLeftRight = 0;
     if (scene.keyboard[GLFW_KEY_RIGHT]) {
-        camLeftRight += 0.75f * time;
+        camLeftRight += 0.5f * time;
         offset.x = camLeftRight;
         offset.z = camLeftRight;
     }
     if (scene.keyboard[GLFW_KEY_LEFT]) {
-        camLeftRight -= 0.75f * time;
+        camLeftRight -= 0.5f * time;
         offset.x = camLeftRight;
         offset.z = camLeftRight;
     }
     if (scene.keyboard[GLFW_KEY_UP]) {
-        offset.y += 0.01f;
+        offset.y += 0.005f;
     }
     if (scene.keyboard[GLFW_KEY_DOWN]) {
-        offset.y -= 0.01f;
+        offset.y -= 0.005f;
         offset.y = std::max(-0.15f, offset.y);
     }
 }

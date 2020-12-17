@@ -18,7 +18,7 @@ void SceneWindow::createGameScene() {
     scene->objects.push_back(move(player));
 
     auto lightHouse = std::make_unique<LightHouse>(*scene);
-    scene->lightHousePosition = {lightHouse->position.x , lightHouse->position.z};
+    scene->lightHousePosition = {lightHouse->position.x, lightHouse->position.z};
     scene->objects.push_back(move(lightHouse));
 
     for (int32_t i = -1; i <= 1; ++i) {
@@ -106,7 +106,7 @@ SceneWindow::SceneWindow(const int width, const int height) : Window{"playground
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
 
-//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     createGameScene();
     createMenuScene(MenuScene::START);
